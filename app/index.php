@@ -20,3 +20,5 @@ $app->get('/hello/{name}[/]', function (Request $rq, Response $rs, array $args) 
     $rs->getBody()->write("<h1> hello world, $name </h1>");
     return $rs;
 });
+
+$app->run();
