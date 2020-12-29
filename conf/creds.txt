@@ -1,0 +1,3 @@
+user=shinobi
+pass=
+dbName=mywishlist
