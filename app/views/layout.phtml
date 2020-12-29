@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="<?= $rootUri ?>/public/css/bootstrap.css">
+    <link rel="stylesheet" href="<?= $rootUri ?>/public/css/style.css">
+    <link rel="stylesheet" href="<?= $rootUri ?>/public/css/fas-all.min.css">
+    <title>MyWishlist</title>
+</head>
+
+<body>
+<div class="container mt-3">
+    <?= $content ?>
+</div>
+
+<script src="<?= $rootUri ?>/public/js/jquery.slim.min.js"></script>
+<script src="<?= $rootUri ?>/public/js/popper.min.js"></script>
+<script src="<?= $rootUri ?>/public/js/bootstrap.min.js"></script>
+<script>
+    function clipboard(item) {
+        var copyText = document.getElementById(item.id);
+        copyText.select();
+        document.execCommand("copy");
+    }
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover({html: true});
+    });
+</script>
+</body>
+</html>

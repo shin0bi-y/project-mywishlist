@@ -1,20 +1,42 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
 
 use Slim\Http\Request as Request;
 use Slim\Http\Response as Response;
 use mywishlist\DBConnection\ConnectionFactory as ConnectionFactory;
+use Slim\Views\PhpRenderer;
+
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 $config = require_once __DIR__ . '/conf/config.php';
-$c = new \Slim\Container($config);
 
-$app = new \Slim\App($c);
+$app = new \Slim\App($config);
+$container = $app->getContainer();
+
+//Setup du container
+$container['view'] = function ($container) {
+    $vars = [
+        "rootUri" => $container->request->getUri()->getBasePath(),
+        "router" => $container->router,
+        "user" => isset($_SESSION['user']) ? $_SESSION['user'] : null
+    ];
+    $renderer = new PhpRenderer(__DIR__ . '/app/views/', $vars);
+    $renderer->setLayout("layout.phtml");
+    return $renderer;
+};
 
 //Routes
 
 $app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem');
 
-$app->post('/liste/create',\mywishlist\controller\Liste::class . ':createListe');
+$app->get('/liste/create', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'createliste.phtml');
+})->setName('pageListeCreate');
+
+$app->post('/liste/listecreated', function (Request $request, Response $response, array $args) use ($container) {
+    //$c = new ListeController($container);
+    //return $c->createListe($request, $response, $args);
+})->setName('listeCreate');
 
 $app->get('/', function (Request $rq, Response $rs, array $args) : Response {
     $rs->getBody()->write("<h1> Home </h1>");
