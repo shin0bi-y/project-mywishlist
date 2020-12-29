@@ -1,6 +1,8 @@
 <?php
 
-namespace mywishlist\bd;
+namespace mywishlist\DBConnection;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use PDO;
 use PDOException;

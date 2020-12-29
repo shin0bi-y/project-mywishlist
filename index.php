@@ -3,7 +3,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Slim\Http\Request as Request;
 use Slim\Http\Response as Response;
-use mywishlist\bd\ConnectionFactory as ConnectionFactory;
+use mywishlist\DBConnection\ConnectionFactory as ConnectionFactory;
 
 $config = require_once __DIR__ . '/conf/config.php';
 $c = new \Slim\Container($config);
