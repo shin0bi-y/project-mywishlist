@@ -7,7 +7,7 @@ DBName : mywishlist
 	password Varchar(255)
 
 - Table List :
-	idList int PRIMARY KEY | FOREIGN KEY | AUTO INC
+	idList int PRIMARY KEY | AUTO INC
 	listName Varchar(255)
 	idAuthor int
 	description Varchar(1024)
@@ -23,4 +23,33 @@ DBName : mywishlist
 	idUser int FOREIGN KEY
 	price double
 
-- A completer...
+------
+
+Requetes "Create tables" : 
+
+create table users(
+    idUser int PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    password VARCHAR(255)
+);
+
+create table list(
+    idList int PRIMARY KEY AUTO_INCREMENT,
+    listName VARCHAR(255),
+    idAuthor int,
+    description VARCHAR(1024),
+    creationDate DATE,
+    limitDate DATE
+);
+
+create table item(
+    idItem int PRIMARY KEY AUTO_INCREMENT,
+    idList int,
+    itemName VARCHAR(255),
+    description VARCHAR(1024),
+    photoPath VARCHAR(255),
+    idUser int,
+    FOREIGN KEY fk_idList (idList) references list(idList),
+    FOREIGN KEY fk_idUser (idUser) references users(idUser)
+)
