@@ -1,0 +1,23 @@
+DBName : mywishlist
+
+- Table Users :
+	idUser int PRIMARY KEY | AUTO INC
+	name Varchar(255)
+	email Varchar(255)
+	password Varchar(255)
+
+- Table List :
+	idList int PRIMARY KEY | FOREIGN KEY | AUTO INC
+	listName Varchar(255)
+	idAuthor int
+	description Varchar(1024)
+	creationDate Date
+	limitDate Date
+
+- Table ListsContent :
+	idList int PRIMARY KEY | FOREIGN KEY
+	element Varchar(255) PRIMARY KEY
+	idBuyer int
+	price double
+
+- A completer...
