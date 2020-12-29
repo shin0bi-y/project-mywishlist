@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use mywishlist\controller\Item as ItemController;
 use Slim\Http\Request as Request;
 use Slim\Http\Response as Response;
 
@@ -12,10 +11,7 @@ $app = new \Slim\App($c);
 
 //Routes
 
-$app->get('/item/{id}[/]',function (Request $rq, Response $rs, array $args) : Response {
-    $c = new ItemController($this);
-    return $c->showItem($rq,$rs,$args);
-});
+$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem');
 
 $app->get('/', function (Request $rq, Response $rs, array $args) : Response {
     $rs->getBody()->write("<h1> Home </h1>");
