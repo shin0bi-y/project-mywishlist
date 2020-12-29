@@ -14,7 +14,7 @@ $app = new \Slim\App($c);
 
 $app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem');
 
-$app->post('/liste',\mywishlist\controller\Liste::class . ':createListe');
+$app->post('/liste/create',\mywishlist\controller\Liste::class . ':createListe');
 
 $app->get('/', function (Request $rq, Response $rs, array $args) : Response {
     $rs->getBody()->write("<h1> Home </h1>");
