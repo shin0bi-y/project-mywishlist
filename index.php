@@ -16,6 +16,8 @@ $app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem');
 
 $app->post('/liste/create',\mywishlist\controller\Liste::class . ':createListe');
 
+$app->get('/liste/{id}[/]',\mywishlist\controller\Liste::class . ':showListe');
+
 $app->get('/', function (Request $rq, Response $rs, array $args) : Response {
     $rs->getBody()->write("<h1> Home </h1>");
     return $rs;
