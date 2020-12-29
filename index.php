@@ -11,6 +11,9 @@ $c = new \Slim\Container($config);
 $app = new \Slim\App($c);
 
 //Routes
+
+$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem');
+
 $app->get('/', function (Request $rq, Response $rs, array $args) : Response {
     $rs->getBody()->write("<h1> Home </h1>");
     return $rs;
