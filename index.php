@@ -38,6 +38,8 @@ $app->post('/liste/listecreated', function (Request $request, Response $response
     //return $c->createListe($request, $response, $args);
 })->setName('listeCreate');
 
+$app->get('/liste/{id}[/]',\mywishlist\controller\Liste::class . ':showListe');
+
 $app->get('/', function (Request $rq, Response $rs, array $args) : Response {
     $rs->getBody()->write("<h1> Home </h1>");
     return $rs;
