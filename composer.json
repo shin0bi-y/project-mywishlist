@@ -2,12 +2,13 @@
   "require" : {
     "slim/slim": "3.*",
     "illuminate/database": "^8.0",
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "ext-pdo": "*"
   },
 
   "autoload": {
     "psr-4": {
-      "wishlist\\" : "src/"
+      "mywishlist\\" : "app/"
     }
   }
 }
