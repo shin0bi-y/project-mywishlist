@@ -29,5 +29,5 @@ $app->run();
 
 $config["creds"];
 
-//ConnectionFactory::setConfig($config["creds"]);
-//ConnectionFactory::makeConnection();
+ConnectionFactory::setConfig($config["creds"]);
+ConnectionFactory::makeConnection();
