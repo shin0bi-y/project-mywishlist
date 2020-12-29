@@ -14,10 +14,13 @@ DBName : mywishlist
 	creationDate Date
 	limitDate Date
 
-- Table ListsContent :
-	idList int PRIMARY KEY | FOREIGN KEY
-	element Varchar(255) PRIMARY KEY
-	idBuyer int
+- Table Item :
+	idItem int PRIMARY KEY | AUTO INC
+	idList int FOREIGN KEY
+	itemName Varchar(255)
+	description Varchar(1024)
+	photoPath Varchar(255)
+	idUser int FOREIGN KEY
 	price double
 
 - A completer...
