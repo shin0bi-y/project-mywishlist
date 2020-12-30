@@ -27,6 +27,8 @@ $app->get('/liste/create[/]', function (Request $request, Response $response, ar
 
 $app->post('/liste/liste_created[/]', \mywishlist\controller\Liste::class . ':createListe')->setName('listeCreate');
 
+$app->post('/liste/modification[/]', \mywishlist\controller\Liste::class . ':modifListe')->setName('listModif');
+
 $app->get('/liste/{id}[/]',\mywishlist\controller\Liste::class . ':showListe')
     ->setName("showListe");
 

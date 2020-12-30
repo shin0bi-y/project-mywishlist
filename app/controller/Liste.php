@@ -25,6 +25,13 @@ class Liste
         $this->c = $c;
     }
 
+    /**
+     * Cree une liste depuis le form et l'ajoute à la BDD
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function createListe(Request $rq, Response $rs, array $args): Response
     {
         $date = date('Y-m-d H:i:s');
@@ -33,15 +40,39 @@ class Liste
         $limitDate = $rq->getParsedBody()['limitDate'];
 
         $list = new \mywishlist\model\Liste();
-        $list->listName = filter_var($listName,FILTER_SANITIZE_STRING);
+        $list->listName = filter_var($listName, FILTER_SANITIZE_STRING);
         $list->idAuthor = -1; //TODO: recup quand les comptes seront faits
-        $list->description = filter_var($description,FILTER_SANITIZE_STRING);
+        $list->description = filter_var($description, FILTER_SANITIZE_STRING);
         $list->creationDate = $date;
         $list->limitDate = $limitDate;
         $list->save();
 
         $name = $rq->getParsedBody()['listName'];
-        $rs->getBody()->write("<h1>nom : $name</h1>");
+        $rs->getBody()->write("<h1>nom : $name</h1>"); //TODO: faire l'affichage
+        return $rs;
+    }
+
+    /**
+     * Modifie une liste de la BDD
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function modifListe(Request $rq, Response $rs, array $args): Response
+    {
+        //TODO:verif que l'utilisateur est bien le proprietaire de la liste
+
+        $listName = $rq->getParsedBody()['listName'];
+        $description = $rq->getParsedBody()['description'];
+        $limitDate = $rq->getParsedBody()['limitDate'];
+
+        \mywishlist\model\Liste::where('idList','=',$rq->getParsedBody()['idList'])
+            ->update([
+                'listName' => $listName,
+                'description' => $description,
+                'limitDate' => $limitDate
+            ]);
         return $rs;
     }
 
@@ -49,13 +80,7 @@ class Liste
     {
         $id = $args['id'];
 
-        ConnectionFactory::setConfig($this->c['creds']);
-        ConnectionFactory::makeConnection();
-        $db = ConnectionFactory::$db;
-
-        $st = $db->prepare('SELECT listName,idAuthor,description,creationDate,limitDate from list where idList = ?');
-        $st->execute(array($id));
-        $row = $st->fetch();
+        $row = \mywishlist\model\Liste::where('idList','=',$id)->first();
 
         $listName = $row['listName'];
         $idAuthor = $row['idAuthor'];
