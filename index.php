@@ -13,9 +13,11 @@ $config = require_once __DIR__ . '/conf/config.php';
 $app = new \Slim\App($config);
 
 $db = new DB();
-$db->addConnection(parse_ini_file($config['creds']));
+$creds = parse_ini_file($config['creds']);
+if ($creds) $db->addConnection($creds);
 $db->setAsGlobal();
 $db->bootEloquent();
+
 
 //-------- Routes --------//
 
@@ -43,7 +45,7 @@ $app->get('/hello/{name}[/]', function (Request $rq, Response $rs, array $args) 
 
 //--> Item
 
-$app->get('/liste/{id}/{idItem}[/]', \mywishlist\controller\Item::class . ':showItem')
+$app->get('/item/{idItem}[/]', \mywishlist\controller\Item::class . ':showItem')
     ->setName("showItem");
 
 
@@ -55,4 +57,3 @@ $app->get('/liste/{id}/{idItem}[/]', \mywishlist\controller\Item::class . ':show
 //--> Run
 
 $app->run();
-

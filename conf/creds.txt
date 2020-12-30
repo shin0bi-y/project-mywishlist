@@ -1,6 +1,6 @@
 driver=mysql
 host=localhost
-username=root
-password=root
+username=shinobi
+password=
 database=mywishlist
 charset=utf8

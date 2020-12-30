@@ -4,6 +4,8 @@ namespace mywishlist\controller;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\Model;
 use mywishlist\DBConnection\ConnectionFactory;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -24,18 +26,17 @@ class Item
 
     public function createItem(Request $rq, Response $rs, array $args): Response
     {
-        ConnectionFactory::setConfig($this->c['creds']);
-        ConnectionFactory::makeConnection();
-        $db = ConnectionFactory::$db;
-
+        
         $idList = $rq->getParsedBody()['idList'];
         $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
         $photoPath = $rq->getParsedBody()['photoPath'];
         $idUser = $rq->getParsedBody()['idUser'];
 
-        $statement = $db->prepare("insert into item (idList, itemName, description, photoPath, idUser) values (?,?,?,?,?)");
-        $statement->execute(array($idList, $itemName, $description, $photoPath, $idUser));
+        \mywishlist\model\Item::query()->insert($idList, $itemName, $description, $photoPath, $idUser);
+
+        //$statement = $db->prepare("insert into item (idList, itemName, description, photoPath, idUser) values (?,?,?,?,?)");
+        //$statement->execute(array($idList, $itemName, $description, $photoPath, $idUser));
 
         //show item on the web page
         $iName = $rq->getParsedBody()['itemName'];
@@ -46,7 +47,10 @@ class Item
 
     public function showItem(Request $rq, Response $rs, array $args) : Response{
         $id = $args['idItem'];
-        $rs->getBody()->write("<h1>Voici l\'item $id</h1>");
+
+        $rset = \mywishlist\model\Item::query()->select("itemName")->where("idItem", "=", $id);
+
+        $rs->getBody()->write("<h1>Voici l'item : <br>". $rset->get("itemName") ." </h1>"); //TODO a completer plus tard
         return $rs;
     }
 }
