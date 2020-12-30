@@ -27,12 +27,30 @@ DBName : mywishlist
 
 Requetes "Create tables" : 
 
+use mywishlist;
+
+show tables;
+
+drop table users;
+drop table list;
+drop table item;
+
+/*------*/
+
 create table users(
-    idUser int PRIMARY KEY AUTO_INCREMENT,
+    idUser int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
     email VARCHAR(255),
     password VARCHAR(255)
 );
+
+alter table users MODIFY idUser int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+insert into users (name, email, password) values ('Jean', 'jean@hotmail.com', '123456');
+
+select * from users;
+
+/*------*/
 
 create table list(
     idList int PRIMARY KEY AUTO_INCREMENT,
@@ -40,8 +58,16 @@ create table list(
     idAuthor int,
     description VARCHAR(1024),
     creationDate DATE,
-    limitDate DATE
+    limitDate DATE,
+    FOREIGN KEY fk_idAuthor (idAuthor) references users(idUser)
 );
+
+alter table list MODIFY idList int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+insert into list (listName, idAuthor, description, creationDate, limitDate) values ('pour yanis', 1, 'cool', now(), now());
+select * from list;
+
+/*------*/
 
 create table item(
     idItem int PRIMARY KEY AUTO_INCREMENT,
@@ -52,4 +78,9 @@ create table item(
     idUser int,
     FOREIGN KEY fk_idList (idList) references list(idList),
     FOREIGN KEY fk_idUser (idUser) references users(idUser)
-)
+);
+
+alter table item MODIFY idItem int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+insert into item (idList, itemName, description, photoPath, idUser) values (1, 'ThinkPad', 'Best Laptop', '/images/thinkpad.jpg', 2);
+
+select * from item;
