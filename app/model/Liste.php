@@ -18,4 +18,7 @@ class Liste extends Model
         return $this->hasMany('\model\Item','idList');
     }
 
+    public function messages() {
+        return $this->hasMany('\model\Message','idList');
+    }
 }

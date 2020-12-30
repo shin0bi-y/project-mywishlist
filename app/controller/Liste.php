@@ -92,5 +92,21 @@ class Liste
         return $rs;
     }
 
+    public function ajouterMessage(Request $rq, Response $rs, array $args): Response
+    {
+        $idList = $rq->getParsedBody()['idList'];
+        $message = $rq->getParsedBody()['message'];
+        $idAuthor = -1; //TODO: idAuthor par compte
+        $date = date('Y-m-d H:i:s');
+
+        $msg = new \mywishlist\model\Message();
+        $msg->idList = filter_var($idList,FILTER_SANITIZE_NUMBER_INT);
+        $msg->idAuthor = filter_var($idAuthor,FILTER_SANITIZE_NUMBER_INT);
+        $msg->message = filter_var($message,FILTER_SANITIZE_STRING);
+        $msg->date = $date;
+
+        $msg->save();
+        return $rs;
+    }
 
 }
