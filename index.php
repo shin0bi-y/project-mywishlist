@@ -19,6 +19,11 @@ $db->bootEloquent();
 
 //-------- Routes --------//
 
+$app->get('/', function (Request $rq, Response $rs, array $args) : Response {
+    $rs->getBody()->write("<h1> Home </h1>");
+    return $rs;
+})->setName("home");
+
 //--> Liste
 
 $app->get('/liste/create[/]', function (Request $request, Response $response, array $args) {
@@ -32,21 +37,14 @@ $app->post('/liste/modification[/]', \mywishlist\controller\Liste::class . ':mod
 $app->get('/liste/{id}[/]',\mywishlist\controller\Liste::class . ':showListe')
     ->setName("showListe");
 
-$app->get('/', function (Request $rq, Response $rs, array $args) : Response {
-    $rs->getBody()->write("<h1> Home </h1>");
-    return $rs;
-})->setName("home");
-
-$app->get('/hello/{name}[/]', function (Request $rq, Response $rs, array $args) : Response {
-    $name = $args['name'];
-    $rs->getBody()->write("<h1> hello world, $name </h1>");
-    return $rs;
-});
 
 //--> Item
 
-$app->get('/liste/{id}/{idItem}[/]', \mywishlist\controller\Item::class . ':showItem')
-    ->setName("showItem");
+$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
+
+//$app->get('/item/create[/]'); form pour creer un item @nathan
+
+$app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
 
 

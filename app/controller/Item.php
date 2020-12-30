@@ -24,9 +24,7 @@ class Item
 
     public function createItem(Request $rq, Response $rs, array $args): Response
     {
-        ConnectionFactory::setConfig($this->c['creds']);
-        ConnectionFactory::makeConnection();
-        $db = ConnectionFactory::$db;
+        $item = new \mywishlist\model\Item();
 
         $idList = $rq->getParsedBody()['idList'];
         $itemName = $rq->getParsedBody()['itemName'];
@@ -34,8 +32,13 @@ class Item
         $photoPath = $rq->getParsedBody()['photoPath'];
         $idUser = $rq->getParsedBody()['idUser'];
 
-        $statement = $db->prepare("insert into item (idList, itemName, description, photoPath, idUser) values (?,?,?,?,?)");
-        $statement->execute(array($idList, $itemName, $description, $photoPath, $idUser));
+        $item->idList = filter_var($idList,FILTER_SANITIZE_NUMBER_INT);
+        $item->itemName = filter_var($itemName,FILTER_SANITIZE_STRING);
+        $item->description = filter_var($description,FILTER_SANITIZE_STRING);
+        $item->photoPath = filter_var($photoPath,FILTER_SANITIZE_URL);
+        $item->idUser = filter_var($idUser,FILTER_SANITIZE_NUMBER_INT);
+
+        $item->save();
 
         //show item on the web page
         $iName = $rq->getParsedBody()['itemName'];
@@ -45,8 +48,14 @@ class Item
     }
 
     public function showItem(Request $rq, Response $rs, array $args) : Response{
-        $id = $args['idItem'];
-        $rs->getBody()->write("<h1>Voici l\'item $id</h1>");
+        $id = $args['id'];
+
+        $row = \mywishlist\model\Item::where('idItem','=',$id)->first();
+
+        $itemName = $row['itemName'];
+        $description = $row['description'];
+
+        $rs->getBody()->write("<h1>$itemName</h1> $description </br> flemme de mettre les autres");
         return $rs;
     }
 }
