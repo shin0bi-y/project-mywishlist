@@ -26,18 +26,27 @@ class Liste
 
     public function createListe(Request $rq, Response $rs, array $args): Response
     {
+        /*
         ConnectionFactory::setConfig($this->c['creds']);
         ConnectionFactory::makeConnection();
         $db = ConnectionFactory::$db;
-
+*/
         $date = date('Y-m-d H:i:s');
         $listName = $rq->getParsedBody()['listName'];
         $description = $rq->getParsedBody()['description'];
         $limitDate = $rq->getParsedBody()['limitDate'];
 
+        $list = new \mywishlist\model\Liste();
+        $list->listName = listName;
+        $list->idAuthor = -1;
+        $list->description = $description;
+        $list->creationDate = $date;
+        $list->limitDate = $limitDate;
+        $list->save();
+        /*
         $st = $db->prepare('INSERT INTO list(listName,idAuthor,description,creationDate,limitDate) values (?,?,?,?,?)');
         $st->execute(array($listName, -1, $description, $date, $limitDate));
-
+*/
         $name = $rq->getParsedBody()['listName'];
         $rs->getBody()->write("<h1>nom : $name</h1>");
         return $rs;
