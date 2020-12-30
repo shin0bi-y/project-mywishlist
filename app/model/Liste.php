@@ -15,10 +15,10 @@ class Liste extends Model
     protected $primaryKey = 'idList';
 
     public function items() {
-        return $this->hasMany('\model\Item','idList');
+        return $this->hasMany('\mywishlist\model\Item','idList');
     }
 
     public function messages() {
-        return $this->hasMany('\model\Message','idList');
+        return $this->hasMany('\mywishlist\model\Message','idList');
     }
 }

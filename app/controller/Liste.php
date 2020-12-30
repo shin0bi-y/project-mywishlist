@@ -82,13 +82,20 @@ class Liste
 
         $row = \mywishlist\model\Liste::where('idList','=',$id)->first();
 
-        $listName = $row['listName'];
-        $idAuthor = $row['idAuthor'];
-        $description = $row['description'];
-        $creationDate = $row['creationDate'];
-        $limitDate = $row['limitDate'];
+        if($row != null) {
+            $listName = $row['listName'];
+            $idAuthor = $row['idAuthor'];
+            $description = $row['description'];
+            $creationDate = $row['creationDate'];
+            $limitDate = $row['limitDate'];
 
-        $rs->getBody()->write("<h1>$listName</h1> $idAuthor $description $creationDate $limitDate");
+            $item = $row->items()->first();
+            $message = $row->messages()->first();
+
+            $rs->getBody()->write("<h1>$listName</h1> $idAuthor $description $creationDate $limitDate
+            </br> <h2>Items</h2> $item->itemName
+            </br> <h2>Messages</h2> $message->message");
+        }
         return $rs;
     }
 

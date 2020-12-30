@@ -15,6 +15,6 @@ class Message extends Model
     protected $primaryKey = 'idMessage';
 
     public function liste() {
-        return $this->belongsTo('\model\Liste','idList');
+        return $this->belongsTo('\mywishlist\model\Liste','idList');
     }
 }

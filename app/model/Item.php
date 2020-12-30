@@ -14,7 +14,7 @@ class Item extends Model
     protected $primaryKey = 'idItem';
 
     public function liste() {
-        return $this->belongsTo('\model\Liste','idList');
+        return $this->belongsTo('\mywishlist\model\Liste','idList');
     }
 
 }

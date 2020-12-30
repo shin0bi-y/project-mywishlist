@@ -39,6 +39,9 @@ $app->post('/liste/modification[/]', \mywishlist\controller\Liste::class . ':mod
 $app->get('/liste/{id}[/]',\mywishlist\controller\Liste::class . ':showListe')
     ->setName("showListe");
 
+//--> Message
+
+$app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMessage')->setName('addMessage');
 
 //--> Item
 
