@@ -60,4 +60,20 @@ class Item
         $rs->getBody()->write("<h1>$itemName</h1> $description </br> flemme de mettre les autres");
         return $rs;
     }
+
+    public function modifItem(Request $rq, Response $rs, array $args) : Response {
+
+        $listName = $rq->getParsedBody()['idItem'];
+        $description = $rq->getParsedBody()['description'];
+        $limitDate = $rq->getParsedBody()['limitDate'];
+
+        \mywishlist\model\Liste::where('idList','=',$rq->getParsedBody()['idList'])
+            ->update([
+                'listName' => $listName,
+                'description' => $description,
+                'limitDate' => $limitDate
+            ]);
+        return $rs;
+
+    }
 }
