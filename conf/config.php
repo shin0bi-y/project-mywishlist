@@ -5,7 +5,7 @@ use Slim\Views\PhpRenderer;
 $config = [
     'dbfile' => __DIR__ . '/../conf/db.conf.ini',
     'settings' => ['displayErrorDetails'=>true],
-    'creds' => "conf/creds.txt",
+    'creds' => "conf/creds.ini",
     'view' => function ($container) {
         $vars = [
             "rootUri" => $container->request->getUri()->getBasePath(),
