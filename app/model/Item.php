@@ -11,6 +11,10 @@ class Item extends Model
 
     public $timestamps = false;
     protected $table = 'item';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'idItem';
+
+    public function liste() {
+        return $this->belongsTo('\model\Liste','idList');
+    }
 
 }
