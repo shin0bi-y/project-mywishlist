@@ -2,12 +2,11 @@
 
 use Slim\Http\Request as Request;
 use Slim\Http\Response as Response;
-use mywishlist\DBConnection\ConnectionFactory as ConnectionFactory;
 use Illuminate\Database\Capsule\Manager as DB;
-use Slim\Views\PhpRenderer;
-
 
 require_once __DIR__ . '/vendor/autoload.php';
+
+//-------- Config --------//
 
 $config = require_once __DIR__ . '/conf/config.php';
 
@@ -18,7 +17,6 @@ $creds = parse_ini_file($config['creds']);
 if ($creds) $db->addConnection($creds);
 $db->setAsGlobal();
 $db->bootEloquent();
-
 
 //-------- Routes --------//
 

@@ -1,6 +1,6 @@
 <body>
     <h2 class="text-center my-5">Création de liste</h2>
-    <form method="POST" action="">
+    <form method="POST" action="<?= $router->pathFor('listeCreate') ?>">
         <div class="form-group">
             <label for="inputTitle">Titre*</label>
             <input type="text" name="titre" class="form-control" id="inputTitle" required>
