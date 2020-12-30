@@ -6,6 +6,7 @@ use mywishlist\DBConnection\ConnectionFactory as ConnectionFactory;
 use Illuminate\Database\Capsule\Manager as DB;
 use Slim\Views\PhpRenderer;
 
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 $config = require_once __DIR__ . '/conf/config.php';
