@@ -23,6 +23,13 @@ DBName : mywishlist
 	idUser int FOREIGN KEY
 	price double
 
+- Table Message :
+    idMessage int PRIMARY KEY | AUTO INC
+    idList int
+    idAuthor int
+    message varchar(1023)
+    date date
+
 ------
 
 Requetes "Create tables" : 
@@ -84,3 +91,13 @@ alter table item MODIFY idItem int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 insert into item (idList, itemName, description, photoPath, idUser) values (1, 'ThinkPad', 'Best Laptop', '/images/thinkpad.jpg', 2);
 
 select * from item;
+
+/*------*/
+
+create table message (
+    idMessage int PRIMARY KEY AUTO_INCREMENT,
+    idList int,
+    idAuthor int,
+    message varchar(1023),
+    date DATE
+);
