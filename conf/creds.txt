@@ -1,3 +1,6 @@
-user=root
-pass=root
-dbName=mywishlist
+driver=mysql
+host=localhost
+username=root
+password=root
+database=mywishlist
+charset=utf8

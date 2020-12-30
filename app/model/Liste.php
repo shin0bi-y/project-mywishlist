@@ -11,7 +11,7 @@ class Liste extends Model
 {
 
     public $timestamps = false;
-    protected $table = 'liste';
-    protected $primaryKey = 'id';
+    protected $table = 'list';
+    protected $primaryKey = 'idList';
 
 }
