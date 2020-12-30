@@ -37,7 +37,7 @@ class Liste
         $limitDate = $rq->getParsedBody()['limitDate'];
 
         $list = new \mywishlist\model\Liste();
-        $list->listName = listName;
+        $list->listName = $listName;
         $list->idAuthor = -1;
         $list->description = $description;
         $list->creationDate = $date;
