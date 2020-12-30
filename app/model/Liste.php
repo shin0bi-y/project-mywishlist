@@ -14,4 +14,8 @@ class Liste extends Model
     protected $table = 'list';
     protected $primaryKey = 'idList';
 
+    public function items() {
+        return $this->hasMany('\model\Item','idList');
+    }
+
 }
