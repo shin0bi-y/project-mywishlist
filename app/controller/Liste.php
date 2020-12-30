@@ -41,7 +41,7 @@ class Liste
 
         $list = new \mywishlist\model\Liste();
         $list->listName = filter_var($listName, FILTER_SANITIZE_STRING);
-        $list->idAuthor = -1; //TODO: recup quand les comptes seront faits
+        $list->idAuthor = 1; //TODO: recup quand les comptes seront faits
         $list->description = filter_var($description, FILTER_SANITIZE_STRING);
         $list->creationDate = $date;
         $list->limitDate = $limitDate;
