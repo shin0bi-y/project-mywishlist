@@ -46,9 +46,6 @@ class Item
 
         $item->save();
 
-        //show item on the web page
-        $iName = $rq->getParsedBody()['itemName'];
-        $rs->getBody()->write("<h1>nom : $iName</h1>");
         return $rs;
 
     }

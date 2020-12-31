@@ -10,7 +10,7 @@ class User extends Model
 {
 
     public $timestamps = false;
-    protected $table = 'item';
+    protected $table = 'users';
     protected $primaryKey = 'idUser';
 
 }
