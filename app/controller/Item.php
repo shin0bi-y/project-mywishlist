@@ -90,12 +90,30 @@ class Item
         $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
 
-        echo "hello" . $rq->getParsedBody()['idItem'];
-
         \mywishlist\model\Item::where('idItem', '=', $rq->getParsedBody()['idItem'])
             ->update([
                 'itemName' => $itemName,
                 'description' => $description
+            ]);
+        return $rs;
+    }
+
+    /**
+     * Modifie l'image d'un item
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function modifImageItem(Request $rq, Response $rs, array $args): Response
+    {
+
+        //Ici, on modifie le path de l'image
+        $photoPath = $rq->getParsedBody()['photoPath'];
+
+        \mywishlist\model\Item::where('idItem', '=', $rq->getParsedBody()['idItem'])
+            ->update([
+                'photoPath' => $photoPath
             ]);
         return $rs;
     }

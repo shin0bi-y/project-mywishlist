@@ -50,6 +50,8 @@ $app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->se
 
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
+$app->post('/item/image[/]',\mywishlist\controller\Item::class . ':modifImageItem')->setName("itemImageModif");
+
 $app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
 $app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
