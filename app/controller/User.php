@@ -33,23 +33,30 @@ class User
     {
         $user = new \mywishlist\model\User();
 
-        $name = $rq->getParsedBody()['name'];
-        $email = $rq->getParsedBody()['email'];
-        $password = $rq->getParsedBody()['password'];
+        if (array_key_exists('email', $rq->getParsedBody()) && $rq->getParsedBody()["email"] !== '' &&
+            array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '' &&
+            array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== '' &&
+            filter_var($rq->getParsedBody()['email'], FILTER_VALIDATE_EMAIL)) // verifie que c'est bien un email
+        {
+            $name = $rq->getParsedBody()['name'];
+            $email = $rq->getParsedBody()['email'];
+            $password = $rq->getParsedBody()['password'];
 
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $user->name = filter_var($name, FILTER_SANITIZE_STRING);
-        $user->email = filter_var($email, FILTER_SANITIZE_EMAIL);
-        $user->password = filter_var($password_hash, FILTER_SANITIZE_STRING);
-        $user->save();
+            $user->name = filter_var($name, FILTER_SANITIZE_STRING);
+            $user->email = filter_var($email, FILTER_VALIDATE_EMAIL);
+            $user->password = filter_var($password_hash, FILTER_SANITIZE_STRING);
+            $user->save();
+
+            //TODO : l'insertion de l'email peut produire une erreur car PrimaryKey
+        }
 
         return $rs;
-
     }
 
     /**
-     * Methode de creation de compte utilisateur
+     * Methode de connexion d'un utilisateur
      * @param Request $rq
      * @param Response $rs
      * @param array $args
@@ -58,21 +65,25 @@ class User
     public function login(Request $rq, Response $rs, array $args): Response
     {
 
-        //TODO : modifier la table pour rendre faire de l'email la cle primaire, il peut servir d'ID
-        $email = $rq->getParsedBody()['email'];
-        $password = $rq->getParsedBody()['password'];
+        if (array_key_exists('email', $rq->getParsedBody()) && $rq->getParsedBody()["email"] !== '' &&
+            array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '')
+        {
+            $email = $rq->getParsedBody()['email'];
+            $password = $rq->getParsedBody()['password'];
+            $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
 
-        $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
-
-        if (password_verify($password, $password_hash[0])) $rs->getBody()->write("<h1>Connecte !</h1>");
-        //TODO : rediriger vers le bon endroit
+            if (password_verify($password, $password_hash[0])) $rs->getBody()->write("<h1>Connecte !</h1>");
+            //TODO : rediriger vers le bon endroit
+        } else {
+            echo "bruh";
+            //TODO : afficher erreur car un champ est mal rempli
+        }
 
         return $rs;
-
     }
 
     /**
-     * Methode de creation de compte utilisateur
+     * Methode de modification de compte utilisateur
      * @param Request $rq
      * @param Response $rs
      * @param array $args
@@ -80,20 +91,21 @@ class User
      */
     public function modifyProfile(Request $rq, Response $rs, array $args): Response
     {
-        //TODO gerer l'auth (voir cours en ligne sur Arche) pour verifier que le user est connecte
+        //TODO gerer l'auth (voir cours en ligne sur Arche) pour verifier que le user est connecte et preremplir l'email
 
         //L'email est prerempli et non modifiable
         //Il est visible et grise
         //Il sert a identifier le User qui veut modifier son compte
         $email = $rq->getParsedBody()['email'];
 
-        //Le password est un champ obligatoire
+        //Le currentPassword est un champ obligatoire
         //On le recupere pour verifier que l'action du user
         $password = $rq->getParsedBody()['currentPassword'];
 
-        if (password_verify($password, $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password")[0])){
+        if (password_verify($password, \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password")[0])){
+
             //On recupere le champ du nom
-            //S'il est rempli on update
+            //S'il est rempli et non nul on update
             if (array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== ''){
                 $name = $rq->getParsedBody()['name'];
                 $name = filter_var($name, FILTER_SANITIZE_STRING);
@@ -111,12 +123,11 @@ class User
             }
 
         } else {
-            //TODO : afficher une erreur
+            //TODO : afficher une erreur pour mauvais mot de passe courant (currentPassword)
             echo "bad password";
         }
 
         return $rs;
-
     }
 
 
