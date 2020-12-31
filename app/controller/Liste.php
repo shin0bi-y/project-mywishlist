@@ -3,8 +3,6 @@
 
 namespace mywishlist\controller;
 
-use Illuminate\Database\Capsule\Manager as DB;
-use mywishlist\DBConnection\ConnectionFactory;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
