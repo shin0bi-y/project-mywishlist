@@ -48,4 +48,27 @@ class User
 
     }
 
+    /**
+     * Methode de creation de compte utilisateur
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function login(Request $rq, Response $rs, array $args): Response
+    {
+
+        //TODO : modifier la table pour rendre faire de l'email la cle primaire, il peut servir d'ID
+        $email = $rq->getParsedBody()['email'];
+        $password = $rq->getParsedBody()['password'];
+
+        $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
+
+        if (password_verify($password, $password_hash[0])) echo "connecte";
+        //TODO : rediriger vers le bon endroit
+
+        return $rs;
+
+    }
+
 }

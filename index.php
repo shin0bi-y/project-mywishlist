@@ -63,6 +63,8 @@ $app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')
 
 $app->post('/login/register[/]',\mywishlist\controller\User::class . ':register')->setName("register");
 
+$app->post('/login[/]',\mywishlist\controller\User::class . ':login')->setName("login");
+
 //--> Run
 
 $app->run();
