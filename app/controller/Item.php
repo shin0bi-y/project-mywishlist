@@ -100,6 +100,13 @@ class Item
         return $rs;
     }
 
+    /**
+     * Methode de deletion d'un item en fonction de son ID
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function deleteItem(Request $rq, Response $rs, array $args): Response
     {
         //TODO: verif que la personne voulant delete est l'auteur de la liste contenant l'item
