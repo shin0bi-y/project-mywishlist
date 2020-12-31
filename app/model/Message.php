@@ -14,6 +14,10 @@ class Message extends Model
     protected $table = 'message';
     protected $primaryKey = 'idMessage';
 
+    /**
+     * Retourne la liste a lquelle appartient le message
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function liste() {
         return $this->belongsTo('\mywishlist\model\Liste','idList');
     }
