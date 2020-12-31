@@ -86,15 +86,16 @@ class Item
     public function modifItem(Request $rq, Response $rs, array $args): Response
     {
 
-        $listName = $rq->getParsedBody()['idItem'];
+        //Ici, on ne modifie que le nom et la description
+        $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
-        $limitDate = $rq->getParsedBody()['limitDate'];
 
-        \mywishlist\model\Liste::where('idList', '=', $rq->getParsedBody()['idList'])
+        echo "hello" . $rq->getParsedBody()['idItem'];
+
+        \mywishlist\model\Item::where('idItem', '=', $rq->getParsedBody()['idItem'])
             ->update([
-                'listName' => $listName,
-                'description' => $description,
-                'limitDate' => $limitDate
+                'itemName' => $itemName,
+                'description' => $description
             ]);
         return $rs;
     }

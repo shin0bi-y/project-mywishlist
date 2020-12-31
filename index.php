@@ -48,9 +48,9 @@ $app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->se
 
 //$app->get('/item/create[/]'); form pour creer un item @nathan[lagrossesousrace?]
 
-$app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
-
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
+
+$app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
 $app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 
