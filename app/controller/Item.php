@@ -119,6 +119,23 @@ class Item
     }
 
     /**
+     * Supprime l'image d'un item
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function deleteImageItem(Request $rq, Response $rs, array $args): Response
+    {
+
+        \mywishlist\model\Item::where('idItem', '=', $rq->getParsedBody()['idItem'])
+            ->update([
+                'photoPath' => null
+            ]);
+        return $rs;
+    }
+
+    /**
      * Methode de deletion d'un item en fonction de son ID
      * @param Request $rq
      * @param Response $rs

@@ -46,11 +46,14 @@ $app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMe
 
 $app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
 
+//Nathan, il faudrait faire les pages de chaque routes ici et au dessus bg
 //$app->get('/item/create[/]'); form pour creer un item @nathan[lagrossesousrace?]
 
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
 $app->post('/item/image[/]',\mywishlist\controller\Item::class . ':modifImageItem')->setName("itemImageModif");
+
+$app->post('/item/image/delete[/]',\mywishlist\controller\Item::class . ':deleteImageItem')->setName("deleteImageItem");
 
 $app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
