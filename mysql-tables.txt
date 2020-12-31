@@ -1,9 +1,8 @@
 DBName : mywishlist
 
 - Table Users :
-	idUser int PRIMARY KEY | AUTO INC
 	name Varchar(255)
-	email Varchar(255)
+	email Varchar(255) Primary Key
 	password Varchar(255)
 
 - Table List :
@@ -45,15 +44,12 @@ drop table item;
 /*------*/
 
 create table users(
-    idUser int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) Primary Key,
     name VARCHAR(255),
-    email VARCHAR(255),
     password VARCHAR(255)
 );
 
-alter table users MODIFY idUser int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-insert into users (name, email, password) values ('Jean', 'jean@hotmail.com', '123456');
+insert into users (email, name, password) values ('jean@hotmail.com', 'Jean', '123456');
 
 select * from users;
 
@@ -62,16 +58,15 @@ select * from users;
 create table list(
     idList int PRIMARY KEY AUTO_INCREMENT,
     listName VARCHAR(255),
-    idAuthor int,
+    emailAuthor VARCHAR(255),
     description VARCHAR(1024),
     creationDate DATE,
     limitDate DATE,
-    FOREIGN KEY fk_idAuthor (idAuthor) references users(idUser)
+    FOREIGN KEY fk_emailAuthor (emailAuthor) references users(email)
 );
 
-alter table list MODIFY idList int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-insert into list (listName, idAuthor, description, creationDate, limitDate) values ('pour yanis', 1, 'cool', now(), now());
+delete from list;
+insert into list (listName, emailAuthor, description, creationDate, limitDate) values ('pour yanis', 'jean@hotmail.com', 'cool', now(), now());
 select * from list;
 
 /*------*/
@@ -82,13 +77,12 @@ create table item(
     itemName VARCHAR(255),
     description VARCHAR(1024),
     photoPath VARCHAR(255),
-    idUser int,
+    emailUser VARCHAR(255),
     FOREIGN KEY fk_idList (idList) references list(idList),
-    FOREIGN KEY fk_idUser (idUser) references users(idUser)
+    FOREIGN KEY fk_emailUser (emailUser) references users(email)
 );
 
-alter table item MODIFY idItem int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-insert into item (idList, itemName, description, photoPath, idUser) values (1, 'ThinkPad', 'Best Laptop', '/images/thinkpad.jpg', 2);
+insert into item (idList, itemName, description, photoPath, emailUser) values (1, 'ThinkPad', 'Best Laptop', '/images/thinkpad.jpg', 'jean@hotmail.com');
 
 select * from item;
 
