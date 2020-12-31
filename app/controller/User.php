@@ -95,7 +95,6 @@ class User
             //On recupere le champ du nom
             //S'il est rempli on update
             if (array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== ''){
-                echo "passage name";
                 $name = $rq->getParsedBody()['name'];
                 $name = filter_var($name, FILTER_SANITIZE_STRING);
                 \mywishlist\model\User::where('email', '=', $rq->getParsedBody()['email'])
@@ -104,13 +103,12 @@ class User
 
             //Idem avec le suppose nouveau password
             if (array_key_exists('newPassword', $rq->getParsedBody()) && $rq->getParsedBody()["newPassword"] !== '') {
-                echo "passage pass";
                 $newPassword = $rq->getParsedBody()['newPassword'];
                 $newPassword = filter_var($newPassword, FILTER_SANITIZE_STRING);
                 $password_hash = password_hash($newPassword, PASSWORD_DEFAULT);
                 \mywishlist\model\User::where('email', '=', $rq->getParsedBody()['email'])
                     ->update(['password' => $password_hash]);
-            } else echo "bruh";
+            }
 
         } else {
             //TODO : afficher une erreur
