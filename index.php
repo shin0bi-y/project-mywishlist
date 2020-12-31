@@ -52,6 +52,7 @@ $app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':create
 
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
+$app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 
 
 //--> Users

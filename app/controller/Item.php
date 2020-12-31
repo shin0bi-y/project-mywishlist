@@ -41,11 +41,11 @@ class Item
         $photoPath = $rq->getParsedBody()['photoPath'];
         $idUser = $rq->getParsedBody()['idUser'];
 
-        $item->idList = filter_var($idList,FILTER_SANITIZE_NUMBER_INT);
-        $item->itemName = filter_var($itemName,FILTER_SANITIZE_STRING);
-        $item->description = filter_var($description,FILTER_SANITIZE_STRING);
-        $item->photoPath = filter_var($photoPath,FILTER_SANITIZE_URL);
-        $item->idUser = filter_var($idUser,FILTER_SANITIZE_NUMBER_INT);
+        $item->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
+        $item->itemName = filter_var($itemName, FILTER_SANITIZE_STRING);
+        $item->description = filter_var($description, FILTER_SANITIZE_STRING);
+        $item->photoPath = filter_var($photoPath, FILTER_SANITIZE_URL);
+        $item->idUser = filter_var($idUser, FILTER_SANITIZE_NUMBER_INT);
 
         $item->save();
 
@@ -63,11 +63,11 @@ class Item
      * @param array $args
      * @return Response
      */
-    public function showItem(Request $rq, Response $rs, array $args) : Response
+    public function showItem(Request $rq, Response $rs, array $args): Response
     {
         $id = $args['id'];
 
-        $row = \mywishlist\model\Item::where('idItem','=',$id)->first();
+        $row = \mywishlist\model\Item::where('idItem', '=', $id)->first();
 
         $itemName = $row['itemName'];
         $description = $row['description'];
@@ -83,20 +83,28 @@ class Item
      * @param array $args
      * @return Response
      */
-    public function modifItem(Request $rq, Response $rs, array $args) : Response
+    public function modifItem(Request $rq, Response $rs, array $args): Response
     {
 
         $listName = $rq->getParsedBody()['idItem'];
         $description = $rq->getParsedBody()['description'];
         $limitDate = $rq->getParsedBody()['limitDate'];
 
-        \mywishlist\model\Liste::where('idList','=',$rq->getParsedBody()['idList'])
+        \mywishlist\model\Liste::where('idList', '=', $rq->getParsedBody()['idList'])
             ->update([
                 'listName' => $listName,
                 'description' => $description,
                 'limitDate' => $limitDate
             ]);
         return $rs;
+    }
 
+    public function deleteItem(Request $rq, Response $rs, array $args): Response
+    {
+        //TODO: verif que la personne voulant delete est l'auteur de la liste contenant l'item
+        $id = filter_var($rq->getParsedBody()['idItem'],FILTER_SANITIZE_NUMBER_INT);
+        \mywishlist\model\Item::where('idItem','=',$id)->delete();
+
+        return $rs;
     }
 }
