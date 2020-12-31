@@ -76,6 +76,13 @@ class Liste
         return $rs;
     }
 
+    /**
+     * Affiche une liste
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function showListe(Request $rq, Response $rs, array $args): Response
     {
         $id = $args['id'];
@@ -99,6 +106,13 @@ class Liste
         return $rs;
     }
 
+    /**
+     * Ajoute un message a une liste
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function ajouterMessage(Request $rq, Response $rs, array $args): Response
     {
         $idList = $rq->getParsedBody()['idList'];

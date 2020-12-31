@@ -24,6 +24,13 @@ class Item
         $this->c = $c;
     }
 
+    /**
+     * Cree un item depuis une requete POST
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function createItem(Request $rq, Response $rs, array $args): Response
     {
         $item = new \mywishlist\model\Item();
@@ -49,7 +56,15 @@ class Item
 
     }
 
-    public function showItem(Request $rq, Response $rs, array $args) : Response{
+    /**
+     * Affiche un item
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function showItem(Request $rq, Response $rs, array $args) : Response
+    {
         $id = $args['id'];
 
         $row = \mywishlist\model\Item::where('idItem','=',$id)->first();
@@ -61,7 +76,15 @@ class Item
         return $rs;
     }
 
-    public function modifItem(Request $rq, Response $rs, array $args) : Response {
+    /**
+     * Modifie les informations d'un item
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function modifItem(Request $rq, Response $rs, array $args) : Response
+    {
 
         $listName = $rq->getParsedBody()['idItem'];
         $description = $rq->getParsedBody()['description'];
