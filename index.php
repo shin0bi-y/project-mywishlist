@@ -65,6 +65,8 @@ $app->post('/login/register[/]',\mywishlist\controller\User::class . ':register'
 
 $app->post('/login[/]',\mywishlist\controller\User::class . ':login')->setName("login");
 
+$app->post('/profile/modification[/]',\mywishlist\controller\User::class . ':modifyProfile')->setName("modifyProfile");
+
 //--> Run
 
 $app->run();
