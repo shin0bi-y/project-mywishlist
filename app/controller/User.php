@@ -130,6 +130,43 @@ class User
         return $rs;
     }
 
+    /**
+     * Methode de suppression du compte
+     *
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function deleteProfile(Request $rq, Response $rs, array $args): Response {
+        //identifie le user qui veut supprimer son compte
+        $email = $rq->getParsedBody()['email'];
+        //il devra retaper son mdp pour autoriser la suppression
+        $password = $rq->getParsedBody()['password'];
 
+        //on verifie que le compte existe
+        if(count(\mywishlist\model\User::query()->select("email")->where("email", "=", $email)->pluck("email")) != 0) {
+            $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
+
+            //on verifie son password
+            if($password_hash[0] != '') {
+                if (password_verify($password, $password_hash[0])) {
+                    //si il est bon, on supprime le compte
+                    \mywishlist\model\User::where('email', '=', $email)->delete();
+                    $rs->getBody()->write("<h1>Supprime !</h1>");
+                } else {
+                    //sinon on previent le user que le mdp n'est pas bon
+                    $rs->getBody()->write("<h1>Mauvais password !</h1>");
+                }
+            }
+        }else {
+            //si il n'existe pas
+            $rs->getBody()->write("<h1>Compte inexistant</h1>");
+        }
+
+        //TODO : Trigger qui supprimer les listes crees par le user + redirection
+
+        return $rs;
+    }
 
 }
