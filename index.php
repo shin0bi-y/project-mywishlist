@@ -62,7 +62,15 @@ $app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')
 
 //--> Users
 
-$app->post('/login/register[/]',\mywishlist\controller\User::class . ':register')->setName("register");
+$app->get('/register[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'register.phtml');
+})->setName('pageRegister');
+
+$app->post('/register[/]',\mywishlist\controller\User::class . ':register')->setName("register");
+
+$app->get('/login[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'login.phtml');
+})->setName('pageLogin');
 
 $app->post('/login[/]',\mywishlist\controller\User::class . ':login')->setName("login");
 
