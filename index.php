@@ -44,18 +44,19 @@ $app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMe
 
 //--> Item
 
-$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
+$app->get('/item/create/{id}[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'createItem.phtml');
+})->setName('pageItemCreate');
 
-//Nathan, il faudrait faire les pages de chaque routes ici et au dessus bg genre... fast
-//$app->get('/item/create[/]'); form pour creer un item @nathan[lagrossesousrace?]
+$app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
+
+$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
 
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
 $app->post('/item/image[/]',\mywishlist\controller\Item::class . ':modifImageItem')->setName("itemImageModif");
 
 $app->post('/item/image/delete[/]',\mywishlist\controller\Item::class . ':deleteImageItem')->setName("deleteImageItem");
-
-$app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
 $app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 
