@@ -67,6 +67,8 @@ $app->post('/login[/]',\mywishlist\controller\User::class . ':login')->setName("
 
 $app->post('/profile/modification[/]',\mywishlist\controller\User::class . ':modifyProfile')->setName("modifyProfile");
 
+$app->post('/profile/delete[/]', \mywishlist\controller\User::class . ':deleteProfile')->setName("deleteProfile");
+
 //--> Run
 
 $app->run();
