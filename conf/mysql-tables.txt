@@ -1,37 +1,3 @@
-DBName : mywishlist
-
-- Table Users :
-	name Varchar(255)
-	email Varchar(255) Primary Key
-	password Varchar(255)
-
-- Table List :
-	idList int PRIMARY KEY | AUTO INC
-	listName Varchar(255)
-	idAuthor int
-	description Varchar(1024)
-	creationDate Date
-	limitDate Date
-
-- Table Item :
-	idItem int PRIMARY KEY | AUTO INC
-	idList int FOREIGN KEY
-	itemName Varchar(255)
-	description Varchar(1024)
-	photoPath Varchar(255)
-	idUser int FOREIGN KEY
-	price double
-
-- Table Message :
-    idMessage int PRIMARY KEY | AUTO INC
-    idList int
-    idAuthor int
-    message varchar(1023)
-    date date
-
-------
-
-Requetes "Create tables" : 
 
 use mywishlist;
 
@@ -60,6 +26,7 @@ create table list(
     listName VARCHAR(255),
     emailAuthor VARCHAR(255),
     description VARCHAR(1024),
+    isPublic tinyint(1),
     creationDate DATE,
     limitDate DATE,
     FOREIGN KEY fk_emailAuthor (emailAuthor) references users(email)
