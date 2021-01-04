@@ -36,6 +36,9 @@ class Liste
         $listName = $rq->getParsedBody()['listName'];
         $description = $rq->getParsedBody()['description'];
         $limitDate = $rq->getParsedBody()['limitDate'];
+        $public = $rq->getParsedBody()['public'];
+        if ($public == null) $public = 0;
+
 
         $list = new \mywishlist\model\Liste();
         $list->listName = filter_var($listName, FILTER_SANITIZE_STRING);
@@ -43,6 +46,7 @@ class Liste
         $list->description = filter_var($description, FILTER_SANITIZE_STRING);
         $list->creationDate = $date;
         $list->limitDate = $limitDate;
+        $list->isPublic = $public;
         $list->save();
 
         $name = $rq->getParsedBody()['listName'];
@@ -65,7 +69,7 @@ class Liste
         $description = $rq->getParsedBody()['description'];
         $limitDate = $rq->getParsedBody()['limitDate'];
 
-        \mywishlist\model\Liste::where('idList','=',$rq->getParsedBody()['idList'])
+        \mywishlist\model\Liste::where('idList', '=', $rq->getParsedBody()['idList'])
             ->update([
                 'listName' => $listName,
                 'description' => $description,
@@ -85,9 +89,9 @@ class Liste
     {
         $id = $args['id'];
 
-        $row = \mywishlist\model\Liste::where('idList','=',$id)->first();
+        $row = \mywishlist\model\Liste::where('idList', '=', $id)->first();
 
-        if($row != null) {
+        if ($row != null) {
             $listName = $row['listName'];
             $idAuthor = $row['idAuthor'];
             $description = $row['description'];
@@ -119,9 +123,9 @@ class Liste
         $date = date('Y-m-d H:i:s');
 
         $msg = new \mywishlist\model\Message();
-        $msg->idList = filter_var($idList,FILTER_SANITIZE_NUMBER_INT);
-        $msg->idAuthor = filter_var($idAuthor,FILTER_SANITIZE_NUMBER_INT);
-        $msg->message = filter_var($message,FILTER_SANITIZE_STRING);
+        $msg->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
+        $msg->idAuthor = filter_var($idAuthor, FILTER_SANITIZE_NUMBER_INT);
+        $msg->message = filter_var($message, FILTER_SANITIZE_STRING);
         $msg->date = $date;
 
         $msg->save();
