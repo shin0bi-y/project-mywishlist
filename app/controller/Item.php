@@ -32,17 +32,17 @@ class Item
     {
         $item = new \mywishlist\model\Item();
 
-        $idList = $rq->getParsedBody()['idList'];
+        $idList = $_GET['idList'];
         $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
         $photoPath = $rq->getParsedBody()['photoPath'];
-        $idUser = $rq->getParsedBody()['idUser'];
+        $idUser = 'jean@hotmail.com';
 
         $item->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
         $item->itemName = filter_var($itemName, FILTER_SANITIZE_STRING);
         $item->description = filter_var($description, FILTER_SANITIZE_STRING);
         $item->photoPath = filter_var($photoPath, FILTER_SANITIZE_URL);
-        $item->idUser = filter_var($idUser, FILTER_SANITIZE_NUMBER_INT);
+        $item->emailAuthor = filter_var($idUser, FILTER_SANITIZE_EMAIL);
 
         $item->save();
 
