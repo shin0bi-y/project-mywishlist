@@ -51,7 +51,7 @@ $app->get('/item/create[/]', function (Request $request, Response $response, arr
 
 $app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
-$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
+$app->get('/item[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
 
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 

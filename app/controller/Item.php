@@ -36,14 +36,14 @@ class Item
         $idList = $_GET['idList'];
         $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
-        $photoPath = $rq->getParsedBody()['photoPath'];
-        $idUser = 'jean@hotmail.com'; //TODO : Recup l'email depuis SESSION
+        //$photoPath = $rq->getParsedBody()['photoPath'];
+        $emailUser = 'jean@hotmail.com'; //TODO : Recup l'email depuis SESSION
 
         $item->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
         $item->itemName = filter_var($itemName, FILTER_SANITIZE_STRING);
         $item->description = filter_var($description, FILTER_SANITIZE_STRING);
         $item->photoPath = null; //filter_var($photoPath, FILTER_SANITIZE_URL); On entre ca plus tard avec modifPhotoPath et un upload
-        $item->emailAuthor = filter_var($idUser, FILTER_SANITIZE_EMAIL);
+        $item->emailUser = filter_var($emailUser, FILTER_SANITIZE_EMAIL);
 
         $item->save();
 
@@ -100,6 +100,7 @@ class Item
      */
     public function modifImageItem(Request $rq, Response $rs, array $args): Response
     {
+        var_dump($_FILES);
         $target_dir = __DIR__ . "/uploads/";
         $target_file = $target_dir . basename($_FILES["photo"]["name"]);
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -109,6 +110,7 @@ class Item
         $correctUpload = true;
 
         if(isset($_POST["submit"])) {
+            echo "set";
             $check = getimagesize($_FILES["photo"]["tmp_name"]); //nom temporaire
             if($check !== false) {
                 //Le fichier est une image
@@ -133,7 +135,7 @@ class Item
         }
 
         //On met a jour le chemin de l'image dans la BDD
-        \mywishlist\model\Item::where('idItem', '=', $rq->getParsedBody()['idItem'])
+        \mywishlist\model\Item::where('idItem', '=', $_GET["idItem"]) //le idItem est dans l'URL
             ->update([
                 'photoPath' => $target_file
             ]);
