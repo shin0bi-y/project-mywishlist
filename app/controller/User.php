@@ -162,7 +162,8 @@ class User
                     $rs = $rs->withRedirect($this->c->router->pathFor("home"));
                 } else {
                     //sinon on previent le user que le mdp n'est pas bon
-                    $rs->getBody()->write("<h1>Mauvais password !</h1>");
+                    $this->c->flash->addMessage('wrongpassword', 'Mauvais mot de passe');
+                    $rs = $rs->withRedirect($this->c->router->pathFor('pageDelete'));
                 }
             }
         } else {
