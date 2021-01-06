@@ -83,6 +83,8 @@ $app->get('/profile/delete[/]', function (Request $request, Response $response, 
 
 $app->post('/profile/delete[/]', \mywishlist\controller\User::class . ':deleteProfile')->setName("deleteProfile");
 
+$app->get('/profile/logout[/]',\mywishlist\controller\User::class . ':logout')->setName("logout");
+
 //--> Run
 
 $app->run();

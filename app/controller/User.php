@@ -48,6 +48,7 @@ class User
             $user->email = filter_var($email, FILTER_VALIDATE_EMAIL);
             $user->password = filter_var($password_hash, FILTER_SANITIZE_STRING);
             $user->save();
+            $rs = $rs->withRedirect($this->c->router->pathFor("home"));
 
             //TODO : l'insertion de l'email peut produire une erreur car PrimaryKey
         }
@@ -72,7 +73,7 @@ class User
             $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
 
             if (password_verify($password, $password_hash[0])) {
-                $rs->getBody()->write("<h1>Connecte !</h1>");
+                $rs = $rs->withRedirect($this->c->router->pathFor("home"));
                 $_SESSION['user'] = array();
                 $_SESSION['user']['email'] = $email;
             }
@@ -172,6 +173,13 @@ class User
 
         //TODO : Trigger qui supprimer les listes crees par le user + redirection
 
+        return $rs;
+    }
+
+    public function logout(Request $rq, Response $rs, array $args): Response
+    {
+        session_unset();
+        $rs = $rs->withRedirect($this->c->router->pathFor("home"));
         return $rs;
     }
 
