@@ -7,6 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 require_once __DIR__ . '/vendor/autoload.php';
 
 //-------- Config --------//
+session_start();
 
 $config = require_once __DIR__ . '/conf/config.php';
 
@@ -17,6 +18,7 @@ $creds = parse_ini_file($config['creds']);
 if ($creds) $db->addConnection($creds);
 $db->setAsGlobal();
 $db->bootEloquent();
+
 
 //-------- Routes --------//
 

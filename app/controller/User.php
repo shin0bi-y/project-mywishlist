@@ -72,7 +72,11 @@ class User
             $password = $rq->getParsedBody()['password'];
             $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
 
-            if (password_verify($password, $password_hash[0])) $rs->getBody()->write("<h1>Connecte !</h1>");
+            if (password_verify($password, $password_hash[0])) {
+                $rs->getBody()->write("<h1>Connecte !</h1>");
+                $_SESSION['user']=array();
+                $_SESSION['user']['email'] = $email;
+            }
             //TODO : rediriger vers le bon endroit
         } else {
             echo "bruh";
