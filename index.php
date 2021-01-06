@@ -22,9 +22,8 @@ $db->bootEloquent();
 
 //-------- Routes --------//
 
-$app->get('/', function (Request $rq, Response $rs, array $args) : Response {
-    $rs->getBody()->write("<h1> Home </h1>");
-    return $rs;
+$app->get('/', function (Request $rq, Response $rs, array $args) {
+    $this->view->render($rs, 'home.phtml');
 })->setName("home");
 
 //--> Liste
