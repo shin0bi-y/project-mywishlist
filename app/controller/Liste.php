@@ -66,6 +66,8 @@ class Liste
         $listName = $rq->getParsedBody()['listName'];
         $description = $rq->getParsedBody()['description'];
         $limitDate = $rq->getParsedBody()['limitDate'];
+        $public = $rq->getParsedBody()['public'];
+        if ($public == null) $public = 0;
 
         $proprietaire = \mywishlist\model\Liste::where('listName','=',$listName)->first()['emailAuthor'];
 
@@ -74,7 +76,8 @@ class Liste
                 ->update([
                     'listName' => $listName,
                     'description' => $description,
-                    'limitDate' => $limitDate
+                    'limitDate' => $limitDate,
+                    'isPublic' => $public
                 ]);
         } else {
             throw new \Exception('Vous n\'etes pas le proprietaire de la liste');
