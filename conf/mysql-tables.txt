@@ -58,7 +58,9 @@ select * from item;
 create table message (
     idMessage int PRIMARY KEY AUTO_INCREMENT,
     idList int,
-    idAuthor int,
+    emailUser VARCHAR(255),
     message varchar(1023),
-    date DATE
+    date DATE,
+    FOREIGN KEY fk_emailUserMessage (emailUser) references users(email),
+    FOREIGN KEY fk_idListMessage (idList) references list(idList)
 );
