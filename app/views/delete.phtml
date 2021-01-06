@@ -1,0 +1,10 @@
+<body>
+<h2 class="text-center my-5">Suppression du compte</h2>
+<form method="POST" action="<?= $router->pathFor('pageDelete') ?>">
+    <div class="form-group">
+        <label for="inputTitle"Tapez votre mot de passe pour valider</label>
+        <input type="text" name="password" class="form-control" id="inputConfirmation" required>
+    </div>
+    <button type="submit" class="btn btn-primary float-right">Supprimer définitivement le compte</button>
+</form>
+</body>

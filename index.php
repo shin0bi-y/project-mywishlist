@@ -76,6 +76,10 @@ $app->post('/login[/]',\mywishlist\controller\User::class . ':login')->setName("
 
 $app->post('/profile/modification[/]',\mywishlist\controller\User::class . ':modifyProfile')->setName("modifyProfile");
 
+$app->get('/profile/delete[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'delete.phtml');
+})->setName('pageDelete');
+
 $app->post('/profile/delete[/]', \mywishlist\controller\User::class . ':deleteProfile')->setName("deleteProfile");
 
 //--> Run

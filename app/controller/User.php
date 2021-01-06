@@ -140,7 +140,8 @@ class User
      */
     public function deleteProfile(Request $rq, Response $rs, array $args): Response {
         //identifie le user qui veut supprimer son compte
-        $email = $rq->getParsedBody()['email'];
+//        $email = $rq->getParsedBody()['email']; //TODO Prendre la variable session a la place
+        $email = "lol@gmail.com";
         //il devra retaper son mdp pour autoriser la suppression
         $password = $rq->getParsedBody()['password'];
 
@@ -153,7 +154,7 @@ class User
                 if (password_verify($password, $password_hash[0])) {
                     //si il est bon, on supprime le compte
                     \mywishlist\model\User::where('email', '=', $email)->delete();
-                    $rs->getBody()->write("<h1>Supprime !</h1>");
+                    $rs = $rs->withRedirect("/project-mywishlist/index.html");
                 } else {
                     //sinon on previent le user que le mdp n'est pas bon
                     $rs->getBody()->write("<h1>Mauvais password !</h1>");
