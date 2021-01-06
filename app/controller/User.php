@@ -66,15 +66,14 @@ class User
     {
 
         if (array_key_exists('email', $rq->getParsedBody()) && $rq->getParsedBody()["email"] !== '' &&
-            array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '')
-        {
+            array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '') {
             $email = $rq->getParsedBody()['email'];
             $password = $rq->getParsedBody()['password'];
             $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
 
             if (password_verify($password, $password_hash[0])) {
                 $rs->getBody()->write("<h1>Connecte !</h1>");
-                $_SESSION['user']=array();
+                $_SESSION['user'] = array();
                 $_SESSION['user']['email'] = $email;
             }
             //TODO : rediriger vers le bon endroit
@@ -106,11 +105,11 @@ class User
         //On le recupere pour verifier que l'action du user
         $password = $rq->getParsedBody()['currentPassword'];
 
-        if (password_verify($password, \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password")[0])){
+        if (password_verify($password, \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password")[0])) {
 
             //On recupere le champ du nom
             //S'il est rempli et non nul on update
-            if (array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== ''){
+            if (array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== '') {
                 $name = $rq->getParsedBody()['name'];
                 $name = filter_var($name, FILTER_SANITIZE_STRING);
                 \mywishlist\model\User::where('email', '=', $rq->getParsedBody()['email'])
@@ -142,29 +141,31 @@ class User
      * @param array $args
      * @return Response
      */
-    public function deleteProfile(Request $rq, Response $rs, array $args): Response {
+    public function deleteProfile(Request $rq, Response $rs, array $args): Response
+    {
         //identifie le user qui veut supprimer son compte
-//        $email = $rq->getParsedBody()['email']; //TODO Prendre la variable session a la place
-        $email = "lol@gmail.com";
+        $email = $_SESSION['user']['email'];
         //il devra retaper son mdp pour autoriser la suppression
         $password = $rq->getParsedBody()['password'];
 
         //on verifie que le compte existe
-        if(count(\mywishlist\model\User::query()->select("email")->where("email", "=", $email)->pluck("email")) != 0) {
+        if (count(\mywishlist\model\User::query()->select("email")->where("email", "=", $email)->pluck("email")) != 0) {
             $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
 
             //on verifie son password
-            if($password_hash[0] != '') {
+            if ($password_hash[0] != '') {
                 if (password_verify($password, $password_hash[0])) {
                     //si il est bon, on supprime le compte
                     \mywishlist\model\User::where('email', '=', $email)->delete();
-                    $rs = $rs->withRedirect("/project-mywishlist/index.html");
+                    $this->c->flash->addMessage('deletesuccess', 'Votre compte a été supprimé');
+                    session_unset();
+                    $rs = $rs->withRedirect($this->c->router->pathFor("home"));
                 } else {
                     //sinon on previent le user que le mdp n'est pas bon
                     $rs->getBody()->write("<h1>Mauvais password !</h1>");
                 }
             }
-        }else {
+        } else {
             //si il n'existe pas
             $rs->getBody()->write("<h1>Compte inexistant</h1>");
         }
