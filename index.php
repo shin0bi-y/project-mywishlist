@@ -22,9 +22,8 @@ $db->bootEloquent();
 
 //-------- Routes --------//
 
-$app->get('/', function (Request $rq, Response $rs, array $args) : Response {
-    $rs->getBody()->write("<h1> Home </h1>");
-    return $rs;
+$app->get('/', function (Request $rq, Response $rs, array $args) {
+    $this->view->render($rs, 'home.phtml');
 })->setName("home");
 
 //--> Liste
@@ -52,7 +51,7 @@ $app->get('/item/create[/]', function (Request $request, Response $response, arr
 
 $app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
-$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
+$app->get('/item[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
 
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
@@ -83,6 +82,8 @@ $app->get('/profile/delete[/]', function (Request $request, Response $response, 
 })->setName('pageDelete');
 
 $app->post('/profile/delete[/]', \mywishlist\controller\User::class . ':deleteProfile')->setName("deleteProfile");
+
+$app->get('/profile/logout[/]',\mywishlist\controller\User::class . ':logout')->setName("logout");
 
 //--> Run
 
