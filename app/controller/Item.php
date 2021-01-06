@@ -108,7 +108,7 @@ class Item
         //vaut 0 dans le cas contraire (exemple : fichier .php et non .jpg)
         $correctUpload = true;
 
-        if(isset($rq-> $_POST["submit"])) {
+        if(isset($_POST["submit"])) {
             $check = getimagesize($_FILES["photo"]["tmp_name"]); //nom temporaire
             if($check !== false) {
                 //Le fichier est une image
