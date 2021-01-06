@@ -46,7 +46,7 @@ $app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMe
 
 //--> Item
 
-$app->get('/item/create/{id}[/]', function (Request $request, Response $response, array $args) {
+$app->get('/item/create[/]', function (Request $request, Response $response, array $args) {
     $this->view->render($response, 'createItem.phtml');
 })->setName('pageItemCreate');
 
