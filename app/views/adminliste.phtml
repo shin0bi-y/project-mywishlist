@@ -1,0 +1,247 @@
+<?php foreach ($items as $item): if ($item->reservation()->get()->isEmpty()): ?>
+     <!-- Modal Upload Image -->
+     <div class="modal fade" id="uploadImage<?= $item->idItem ?>" tabindex="-1" role="dialog" aria-labelledby="uploadImgLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadImgLabel"><?= $item->itemName ?> - Upload d'image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <form enctype="multipart/form-data" method="POST" action="<?= $router->pathFor('uploadImgItem', ['idList' => $liste->idList, 'idItem' => $item->idItem]) ?>" >
+                         <div class="modal-body">
+                            <div class="form-group col-md-6">
+                            <label class="col-form-label-lg">Choisissez un fichier :</label>
+                                <div class="custom-file">
+                                    <input type="file" name="image" class="custom-file-label" required>
+                                </div>
+                            </div>
+                         </div>
+                         <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-toggle="modal" href="#edit<?= $item->id ?>" role="button" data-dismiss="modal">Retour</button>
+                              <button type="submit" class="btn btn-primary">Appliquer</button>
+                         </div>
+                    </form>
+                
+             </div>
+        </div>
+    </div>
+    <!-- Modal Modification -->
+    <div class="modal fade" id="edit<?= $item->idItem ?>" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?= $item->itemName ?> - Modification</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="<?= $router->pathFor('updateItem', ['idList' => $liste->idList, 'idItem' => $item->idItem]) ?>">
+                    <div class="modal-body">
+                        <?php if (filter_var($item->img, FILTER_VALIDATE_URL)): ?>
+                            <img class="img-fluid img-thumbnail mx-auto d-block" src="<?= $item->photoPath ?>" alt="Image de l'objet">
+                        <?php else: ?>
+                            <img class="img-fluid img-thumbnail mx-auto d-block" src="<?= $rootUri ?>/public/images/<?= $item->photoPath ?>" alt="Image de l'objet">
+                        <?php endif; ?>
+                        <div class="form-group mt-2 text-center">
+                            <a class="btn btn-sm btn-primary" data-toggle="modal" href="#uploadImage<?= $item->idItem ?>" role="button" data-dismiss="modal" >Charger une image</a>
+                            <a class="btn btn-sm btn-primary" data-toggle="collapse" href="#editImage<?= $item->idItem ?>" role="button" aria-expanded="false" aria-controls="editImage<?= $item->idItem ?>">Modifier l'image</a>
+                            <a href="#" class="btn btn-sm btn-danger" data-toggle="popover" title="<i class='fas fa-exclamation-triangle'></i> Êtes-vous sûr?" data-placement="bottom" data-trigger="focus" data-content="<div class='btn-group btn-group-sm' role='group'><a class='btn btn-sm btn-danger' href='<?= $router->pathFor('deleteImageItem', ['idList' => $liste->idListe, 'id' => $item->idItem]) ?>'>Confirmer</a><a class='btn btn-sm btn-primary' href='#'>Annuler</a></div>">
+                                Supprimer l'image
+                            </a>
+                        </div>
+                        <div class="collapse" id="editImage<?= $item->idItem ?>">
+                            <div class="form-group">
+                                <label for="inputLinkPicture<?= $item->idItem ?>">Lien vers l'image*</label>
+                                <input type="text" name="picture" class="form-control" id="inputLinkPicture<?= $item->idItem ?>" placeholder="Lien de l'image" value="<?= $item->photoPath ?>" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName<?= $item->idItem ?>">Nom*</label>
+                            <input type="text" name="name" class="form-control" id="inputName<?= $item->idItem ?>" placeholder="Nom de l'objet" value="<?= $item->itemName ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDesc<?= $item->idItem ?>">Description</label>
+                            <textarea class="form-control" id="inputDesc<?= $item->idItem ?>" rows="3" name="desc"><?= $item->description ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputUrl<?= $item->idItem ?>">Lien pour plus d'information</label>
+                            <input type="url" name="url" class="form-control" id="inputUrl<?= $item->idItem ?>" value="<?= $item->photoPath ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPrice<?= $item->idItem ?>">Prix*</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="inputPrice<?= $item->idItem ?>" name="prix" value="<?= $item->cout ?>" required>
+                        </div>
+                        <?php if (is_null($item->id_cagnotte)) : ?>
+                        <div class="form-group">
+                            <input type="checkbox" id="cagnotte" name="cagnotte"</input>
+                            <label >Ajouter une cagnotte</label>
+                        </div>
+                        <div class="font-weight-bold"><p class="text-danger">Une cagnotte ne peut plus être supprimée une fois créée !</p></div>
+                        <?php else : ?>
+                        <div class="form-group">
+                            <input type="checkbox" id="cagnotte" disabled name="cagnotte" checked</input>
+                            <label class="font-weight-bold"><p class="text-danger">Une cagnotte existe déjà pour cet item.</p></label>
+                        </div>
+                        <?php endif; ?>
+                        Les champs marqués d'un astérisque sont obligatoires.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Appliquer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endif; endforeach; ?>
+<div class="alert alert-dark" role="alert">
+    <h4 class="alert-heading">Espace Administration</h4>
+    <p>C'est à partir de cette page que vous pouvez effectuer des actions sur votre liste.</p>
+    <hr>
+    <p class="mb-0">Vous modifiez actuellement votre liste. </p>
+</div>
+<?php if (isset($flash['error'])) foreach ($flash['error'] as $m): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Mince!</strong> <?= $m ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endforeach; ?>
+<?php if (isset($flash['success'])) foreach ($flash['success'] as $m): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Super!</strong> <?= $m ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endforeach; ?>
+<div class="row">
+    <div class="col-3">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="general-tab" data-toggle="pill" href="#general" role="tab" aria-controls="general" aria-selected="true">Général</a>
+            <a class="nav-link" id="manageItems-tab" data-toggle="pill" href="#manageItems" role="tab" aria-controls="manageItems" aria-selected="false">Gérer les objets</a>
+            <a class="nav-link" id="createItem-tab" data-toggle="pill" href="#createItem" role="tab" aria-controls="createItem" aria-selected="false">Ajouter un objet</a>
+        </div>
+        <p class="text-center my-0">Partagez votre liste!</p>
+    </div>
+    <div class="col-9">
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="general" role="tabpanel">
+                <div class="card bg-light">
+                    <div class="card-header">
+                        Général
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="<?= $router->pathFor('updateListe', ['idList' => $liste->idList]) ?>">
+                            <div class="form-group">
+                                <label for="inputTitle">Titre*</label>
+                                <input type="text" name="newTitle" class="form-control" id="inputTitle" value="<?= $liste->listName ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDateExpi">Date d'expiration*</label>
+                                <input type="date" name="newDate" class="form-control" id="inputDateExpi" value="<?= $liste->limitDate ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDesc0">Description</label>
+                                <textarea class="form-control" id="inputDesc0" rows="3" name="newDescription"><?= $liste->description ?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="public" name="public" <?php if($liste->isPublic): ?> checked <?php endif; ?>>
+                                    <label class="custom-control-label" for="public">Rendre la liste publique</label>
+                                </div>
+                            </div>
+                            Les champs marqués d'un astérisque sont obligatoires.
+                            <button type="submit" class="btn btn-lg btn-primary float-right">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="createItem" role="tabpanel">
+                <div class="card bg-light">
+                    <div class="card-header">
+                        Ajouter un objet
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="<?= $router->pathFor('pageItemCreate', ['idList' => $liste->idList]) ?>">
+                            <div class="form-group">
+                                <label for="inputName">Nom de l'objet*</label>
+                                <input type="text" name="nom" class="form-control" id="inputName">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPrix">Prix*</label>
+                                <input type="number" step="0.01" min="0" name="prix" class="form-control" id="inputPrix">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputLinkPicture"><abbr title="Nom d'un fichier présent dans le dossier /public/images ou lien direct">Image (?)</abbr></label>
+                                <input type="text" name="picture" class="form-control" id="inputLinkPicture">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputUrl">Lien pour plus d'information</label>
+                                <input type="url" name="url" class="form-control" id="inputUrl">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDesc">Description</label>
+                                <textarea class="form-control" id="inputDesc" rows="3" name="descr"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" id="cagnotte" name="cagnotte"</input>
+                                <label >Ajouter une cagnotte</label>
+                            </div>
+                            <div class="font-weight-bold"><p class="text-danger">Une cagnotte ne peut plus être supprimée une fois créée !</p></div>
+                            Les champs marqués d'un astérisque sont obligatoires.
+                            <button type="submit" class="btn btn-lg btn-primary float-right">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="manageItems" role="tabpanel">
+                <div class="card bg-light">
+                    <div class="card-header">
+                        Gérer les objets
+                    </div>
+                    <div class="card-body">
+                        <?php if (!$items->isEmpty()): ?>
+                            <div class="row row-cols-1 row-cols-md-2">
+                                <?php foreach ($items as $item) : ?>
+                                    <div class="col mb-2">
+                                        <div class="card h-100">
+                                            <?php if (filter_var($item->photoPath, FILTER_VALIDATE_URL)): ?>
+                                                <img class="card-img" src="<?= $item->photopath ?>" alt="Image de l'objet" style="height: 8vw;">
+                                            <?php else: ?>
+                                                <img class="card-img" src="<?= $rootUri ?>/public/images/<?= $item->photopath ?>" alt="Image de l'objet" style="height: 8vw;">
+                                            <?php endif; ?>
+                                            <div class="card-img-overlay">
+                                                <span class="card-text badge badge-warning"><?= $item->cout ?> €</span>
+                                                    <div class="btn-group btn-group-sm float-right" role="group">
+                                                        <a class="btn btn-sm btn-primary" data-toggle="modal" href="#edit<?= $item->idItem ?>" role="button">Modifier</a>
+                                                        <button type="submit" class="btn btn-sm btn-danger" data-toggle="popover" title="<i class='fas fa-exclamation-triangle'></i> Êtes-vous sûr?" data-placement="bottom" data-trigger="focus" data-content="<div class='btn-group btn-group-sm' role='group'><a class='btn btn-sm btn-danger' href='<?= $router->pathFor('deleteItem', ['idList' => $liste->idList, 'idItem' => $item->idItem]) ?>'>Confirmer</a><a class='btn btn-sm btn-primary' href='#'>Annuler</a></div>">
+                                                            Supprimer
+                                                        </button>
+                                                    </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <h3 class="card-title my-1"><?= $item->itemName ?></h3>
+                                                <p class="card-text text-truncate"><?= $item->description ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-dark text-center" role="alert">
+                                <h4 class="alert-heading">Bien joué!</h4>
+                                <p>Cette liste a été créée, mais elle est actuellement vide. Il ne vous manque plus qu'à y ajouter des objets!</p>
+                                <hr>
+                                <p class="mb-0">Une fois les objets ajoutés, vous pourrez la partager à vos proches.</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
