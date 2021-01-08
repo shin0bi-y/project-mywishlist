@@ -1,0 +1,15 @@
+<body>
+<h2 class="text-center my-5">Login</h2>
+<form method="POST" action="<?= $router->pathFor('login') ?>">
+    <div class="form-group">
+        <label for="inputTitle">Email*</label>
+        <input type="text" name="email" class="form-control" id="inputEmail" required>
+    </div>
+    <div class="form-group">
+        <label for="textarea">Password*</label>
+        <input type="password" class="form-control" id="inputPassword" rows="3" name="password" required>
+    </div>
+    Les champs marqués d'un astérisque sont obligatoires.
+    <button type="submit" class="btn btn-primary float-right">Se connecter</button>
+</form>
+</body>

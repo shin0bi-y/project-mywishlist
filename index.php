@@ -7,6 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 require_once __DIR__ . '/vendor/autoload.php';
 
 //-------- Config --------//
+session_start();
 
 $config = require_once __DIR__ . '/conf/config.php';
 
@@ -18,11 +19,11 @@ if ($creds) $db->addConnection($creds);
 $db->setAsGlobal();
 $db->bootEloquent();
 
+
 //-------- Routes --------//
 
-$app->get('/', function (Request $rq, Response $rs, array $args) : Response {
-    $rs->getBody()->write("<h1> Home </h1>");
-    return $rs;
+$app->get('/', function (Request $rq, Response $rs, array $args) {
+    $this->view->render($rs, 'home.phtml');
 })->setName("home");
 
 //--> Liste
@@ -46,13 +47,13 @@ $app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMe
 
 //--> Item
 
-$app->get('/item/create/{id}[/]', function (Request $request, Response $response, array $args) {
+$app->get('/item/create[/]', function (Request $request, Response $response, array $args) {
     $this->view->render($response, 'createItem.phtml');
 })->setName('pageItemCreate');
 
 $app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
-$app->get('/item/{id}[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
+$app->get('/item[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
 
 $app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
@@ -64,13 +65,27 @@ $app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')
 
 //--> Users
 
-$app->post('/login/register[/]',\mywishlist\controller\User::class . ':register')->setName("register");
+$app->get('/register[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'register.phtml');
+})->setName('pageRegister');
+
+$app->post('/register[/]',\mywishlist\controller\User::class . ':register')->setName("register");
+
+$app->get('/login[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'login.phtml');
+})->setName('pageLogin');
 
 $app->post('/login[/]',\mywishlist\controller\User::class . ':login')->setName("login");
 
 $app->post('/profile/modification[/]',\mywishlist\controller\User::class . ':modifyProfile')->setName("modifyProfile");
 
+$app->get('/profile/delete[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'delete.phtml');
+})->setName('pageDelete');
+
 $app->post('/profile/delete[/]', \mywishlist\controller\User::class . ':deleteProfile')->setName("deleteProfile");
+
+$app->get('/profile/logout[/]',\mywishlist\controller\User::class . ':logout')->setName("logout");
 
 //--> Run
 

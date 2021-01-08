@@ -42,7 +42,7 @@ class Liste
 
         $list = new \mywishlist\model\Liste();
         $list->listName = filter_var($listName, FILTER_SANITIZE_STRING);
-        $list->emailAuthor = 'jean@hotmail.com'; //TODO: recup quand les comptes seront faits
+        $list->emailAuthor = $_SESSION['user']['email']; //TODO: recup quand les comptes seront faits
         $list->description = filter_var($description, FILTER_SANITIZE_STRING);
         $list->creationDate = $date;
         $list->limitDate = $limitDate;
@@ -63,18 +63,26 @@ class Liste
      */
     public function modifListe(Request $rq, Response $rs, array $args): Response
     {
-        //TODO:verif que l'utilisateur est bien le proprietaire de la liste
-
         $listName = $rq->getParsedBody()['listName'];
         $description = $rq->getParsedBody()['description'];
         $limitDate = $rq->getParsedBody()['limitDate'];
+        $public = $rq->getParsedBody()['public'];
+        if ($public == null) $public = 0;
 
-        \mywishlist\model\Liste::where('idList', '=', $rq->getParsedBody()['idList'])
-            ->update([
-                'listName' => $listName,
-                'description' => $description,
-                'limitDate' => $limitDate
-            ]);
+        $proprietaire = \mywishlist\model\Liste::where('listName','=',$listName)->first()['emailAuthor'];
+
+        if($_SESSION['user']['email']==$proprietaire) {
+            \mywishlist\model\Liste::where('idList', '=', $rq->getParsedBody()['idList'])
+                ->update([
+                    'listName' => $listName,
+                    'description' => $description,
+                    'limitDate' => $limitDate,
+                    'isPublic' => $public
+                ]);
+        } else {
+            throw new \Exception('Vous n\'etes pas le proprietaire de la liste');
+        }
+
         return $rs;
     }
 
@@ -119,12 +127,12 @@ class Liste
     {
         $idList = $rq->getParsedBody()['idList'];
         $message = $rq->getParsedBody()['message'];
-        $idAuthor = -1; //TODO: idAuthor par compte
+        $email = $_SESSION['user']['email'];
         $date = date('Y-m-d H:i:s');
 
         $msg = new \mywishlist\model\Message();
         $msg->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
-        $msg->idAuthor = filter_var($idAuthor, FILTER_SANITIZE_NUMBER_INT);
+        $msg->emailAuthor = filter_var($email, FILTER_SANITIZE_NUMBER_INT);
         $msg->message = filter_var($message, FILTER_SANITIZE_STRING);
         $msg->date = $date;
 

@@ -13,6 +13,9 @@ $config = [
         $renderer = new PhpRenderer(__DIR__ . '/../app/views', $vars);
         $renderer->setLayout("layout.phtml");
         return $renderer;
+    },
+    'flash' => function () {
+        return new Slim\Flash\Messages();
     }
 ];
 

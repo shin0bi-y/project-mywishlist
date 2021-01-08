@@ -48,6 +48,7 @@ class User
             $user->email = filter_var($email, FILTER_VALIDATE_EMAIL);
             $user->password = filter_var($password_hash, FILTER_SANITIZE_STRING);
             $user->save();
+            $rs = $rs->withRedirect($this->c->router->pathFor("home"));
 
             //TODO : l'insertion de l'email peut produire une erreur car PrimaryKey
         }
@@ -66,13 +67,16 @@ class User
     {
 
         if (array_key_exists('email', $rq->getParsedBody()) && $rq->getParsedBody()["email"] !== '' &&
-            array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '')
-        {
+            array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '') {
             $email = $rq->getParsedBody()['email'];
             $password = $rq->getParsedBody()['password'];
             $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
 
-            if (password_verify($password, $password_hash[0])) $rs->getBody()->write("<h1>Connecte !</h1>");
+            if (password_verify($password, $password_hash[0])) {
+                $rs = $rs->withRedirect($this->c->router->pathFor("home"));
+                $_SESSION['user'] = array();
+                $_SESSION['user']['email'] = $email;
+            }
             //TODO : rediriger vers le bon endroit
         } else {
             echo "bruh";
@@ -102,11 +106,11 @@ class User
         //On le recupere pour verifier que l'action du user
         $password = $rq->getParsedBody()['currentPassword'];
 
-        if (password_verify($password, \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password")[0])){
+        if (password_verify($password, \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password")[0])) {
 
             //On recupere le champ du nom
             //S'il est rempli et non nul on update
-            if (array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== ''){
+            if (array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== '') {
                 $name = $rq->getParsedBody()['name'];
                 $name = filter_var($name, FILTER_SANITIZE_STRING);
                 \mywishlist\model\User::where('email', '=', $rq->getParsedBody()['email'])
@@ -138,34 +142,45 @@ class User
      * @param array $args
      * @return Response
      */
-    public function deleteProfile(Request $rq, Response $rs, array $args): Response {
+    public function deleteProfile(Request $rq, Response $rs, array $args): Response
+    {
         //identifie le user qui veut supprimer son compte
-        $email = $rq->getParsedBody()['email'];
+        $email = $_SESSION['user']['email'];
         //il devra retaper son mdp pour autoriser la suppression
         $password = $rq->getParsedBody()['password'];
 
         //on verifie que le compte existe
-        if(count(\mywishlist\model\User::query()->select("email")->where("email", "=", $email)->pluck("email")) != 0) {
+        if (count(\mywishlist\model\User::query()->select("email")->where("email", "=", $email)->pluck("email")) != 0) {
             $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
 
             //on verifie son password
-            if($password_hash[0] != '') {
+            if ($password_hash[0] != '') {
                 if (password_verify($password, $password_hash[0])) {
                     //si il est bon, on supprime le compte
                     \mywishlist\model\User::where('email', '=', $email)->delete();
-                    $rs->getBody()->write("<h1>Supprime !</h1>");
+                    $this->c->flash->addMessage('deletesuccess', 'Votre compte a été supprimé');
+                    session_unset();
+                    $rs = $rs->withRedirect($this->c->router->pathFor("home"));
                 } else {
                     //sinon on previent le user que le mdp n'est pas bon
-                    $rs->getBody()->write("<h1>Mauvais password !</h1>");
+                    $this->c->flash->addMessage('wrongpassword', 'Mauvais mot de passe');
+                    $rs = $rs->withRedirect($this->c->router->pathFor('pageDelete'));
                 }
             }
-        }else {
+        } else {
             //si il n'existe pas
             $rs->getBody()->write("<h1>Compte inexistant</h1>");
         }
 
         //TODO : Trigger qui supprimer les listes crees par le user + redirection
 
+        return $rs;
+    }
+
+    public function logout(Request $rq, Response $rs, array $args): Response
+    {
+        session_unset();
+        $rs = $rs->withRedirect($this->c->router->pathFor("home"));
         return $rs;
     }
 
