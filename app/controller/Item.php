@@ -100,42 +100,40 @@ class Item
      */
     public function modifImageItem(Request $rq, Response $rs, array $args): Response
     {
+        echo "POST : ";
+        var_dump($_POST);
+        echo "<br>FILES : ";
         var_dump($_FILES);
-        $target_dir = __DIR__ . "/uploads/";
-        $target_file = $target_dir . basename($_FILES["photo"]["name"]);
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($_FILES["submit"]["name"]);
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
         //vaut 1 si le fichier a upload (image) est conforme
         //vaut 0 dans le cas contraire (exemple : fichier .php et non .jpg)
         $correctUpload = true;
 
-        if(isset($_POST["submit"])) {
-            echo "set";
-            $check = getimagesize($_FILES["photo"]["tmp_name"]); //nom temporaire
-            if($check !== false) {
-                //Le fichier est une image
-                $correctUpload = false;
-            }
-        }
-
-        //On verifie l'extension
+        //On verifie l'extension meme si c'est deja fait dans le form
+        //On ne fait jamais confiance a l'utilisateur nous
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
             $correctUpload = false;
         }
 
         //On verifie l'etat du boolean correctUpload
         if ($correctUpload == false) {
+            echo "<br>not correctUpload ";
             //TODO : rediriger ou afficher une erreur d'upload
         } else {
-            if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-                //TODO : Montrer que l'upload est reussi
+            if (move_uploaded_file($_FILES["submit"]["tmp_name"], $target_file)) {
+                echo "<br>upload ok ";
+                //TODO : Montrer que l'upload a echoue
             } else {
+                echo "<br>upload ko ";
                 //TODO : Montrer que l'upload a echoue
             }
         }
 
         //On met a jour le chemin de l'image dans la BDD
-        \mywishlist\model\Item::where('idItem', '=', $_GET["idItem"]) //le idItem est dans l'URL
+        \mywishlist\model\Item::where('idItem', '=', "2") //le idItem est dans l'URL
             ->update([
                 'photoPath' => $target_file
             ]);

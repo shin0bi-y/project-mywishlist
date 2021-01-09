@@ -55,7 +55,11 @@ $app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':create
 
 $app->get('/item[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
 
-$app->post('/item/modification[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
+$app->get('/item/modification[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'modifItem.phtml');
+})->setName("pageModifItem");
+
+$app->post('/item/modification_done[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
 $app->post('/item/image[/]',\mywishlist\controller\Item::class . ':modifImageItem')->setName("itemImageModif");
 
