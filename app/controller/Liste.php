@@ -100,22 +100,7 @@ class Liste
         $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
 
         if ($liste != null) {
-            /*
-            $listName = $liste['listName'];
-            $idAuthor = $liste['idAuthor'];
-            $description = $liste['description'];
-            $creationDate = $liste['creationDate'];
-            $limitDate = $liste['limitDate'];
-
-            $item = $liste->items()->first();
-            $message = $liste->messages()->first();
-
-            $rs->getBody()->write("<h1>$listName</h1> $idAuthor $description $creationDate $limitDate
-            </br> <h2>Items</h2> $item->itemName
-            </br> <h2>Messages</h2> $message->message");
-            */
             $items = $liste->items()->get();
-
             $this->c->view->render($rs, 'liste.phtml', [
                 "liste" => $liste,
                 "items" => $items
@@ -162,5 +147,4 @@ class Liste
         ]);
         return $rs;
     }
-
 }
