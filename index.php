@@ -36,7 +36,7 @@ $app->post('/liste/liste_created[/]', \mywishlist\controller\Liste::class . ':cr
 
 $app->post('/liste/modification[/]', \mywishlist\controller\Liste::class . ':modifListe')->setName('listModif');
 
-$app->get('/liste/{id}/admin', Liste::class . ':getAdminListe')->setName('listeAdmin');
+$app->get('/liste/{id}/admin', \mywishlist\controller\Liste::class . ':getAdminListe')->setName('listeAdmin');
 
 $app->get('/liste/{id}[/]',\mywishlist\controller\Liste::class . ':showListe')
     ->setName("showListe");

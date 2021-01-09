@@ -142,7 +142,7 @@ class Liste
 
     public function getAdminListe(Request $rq, Response $rs, array $args): Response
     {
-        $liste = Liste::where(['idList'=>$args['id']])->firstOrFail();
+        $liste = \mywishlist\model\Liste::where(['idList'=>$args['id']])->firstOrFail();
         $this->loadCookiesFromRequest($rq);
 
         $this->view->render($rs, 'adminliste.phtml', [
