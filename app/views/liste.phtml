@@ -1,0 +1,32 @@
+<?php if ($liste->limitDate > date('Y-m-d H:i:s')): ?>
+    <div class="container">
+        <div class="row">
+            <h1><?php echo $liste->listName ?></h1>
+        </div>
+        <div class="row">
+            <div class="col">
+                <?php echo $liste->description?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <br/>
+                <?php if($liste->isPublic==1) echo 'Publique : Oui'; else echo 'Publique : Non';?>
+            </div>
+            <div class="col">
+                <br/>
+                <?php echo 'Date d\'expiration : ' . $liste->limitDate ?>
+            </div>
+        </div>
+        <div class="row row-cols-3">
+            <?php foreach($items as $item) :?>
+            <div class="col">
+                <br/>
+                <?php echo $item->itemName?>
+            </div>
+            <?php endforeach;?>
+        </div>
+    </div>
+<?php else: ?>
+    Liste expirée
+<?php endif; ?>

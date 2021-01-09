@@ -69,9 +69,9 @@ class Liste
         $public = $rq->getParsedBody()['public'];
         if ($public == null) $public = 0;
 
-        $proprietaire = \mywishlist\model\Liste::where('listName','=',$listName)->first()['emailAuthor'];
+        $proprietaire = \mywishlist\model\Liste::where('listName', '=', $listName)->first()['emailAuthor'];
 
-        if($_SESSION['user']['email']==$proprietaire) {
+        if ($_SESSION['user']['email'] == $proprietaire) {
             \mywishlist\model\Liste::where('idList', '=', $rq->getParsedBody()['idList'])
                 ->update([
                     'listName' => $listName,
@@ -97,21 +97,29 @@ class Liste
     {
         $id = $args['id'];
 
-        $row = \mywishlist\model\Liste::where('idList', '=', $id)->first();
+        $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
 
-        if ($row != null) {
-            $listName = $row['listName'];
-            $idAuthor = $row['idAuthor'];
-            $description = $row['description'];
-            $creationDate = $row['creationDate'];
-            $limitDate = $row['limitDate'];
+        if ($liste != null) {
+            /*
+            $listName = $liste['listName'];
+            $idAuthor = $liste['idAuthor'];
+            $description = $liste['description'];
+            $creationDate = $liste['creationDate'];
+            $limitDate = $liste['limitDate'];
 
-            $item = $row->items()->first();
-            $message = $row->messages()->first();
+            $item = $liste->items()->first();
+            $message = $liste->messages()->first();
 
             $rs->getBody()->write("<h1>$listName</h1> $idAuthor $description $creationDate $limitDate
             </br> <h2>Items</h2> $item->itemName
             </br> <h2>Messages</h2> $message->message");
+            */
+            $items = $liste->items()->get();
+
+            $this->c->view->render($rs, 'liste.phtml', [
+                "liste" => $liste,
+                "items" => $items
+            ]);
         }
         return $rs;
     }
@@ -142,7 +150,7 @@ class Liste
 
     public function getAdminListe(Request $rq, Response $rs, array $args): Response
     {
-        $liste = \mywishlist\model\Liste::where(['idList'=>$args['id']])->firstOrFail();
+        $liste = \mywishlist\model\Liste::where(['idList' => $args['id']])->firstOrFail();
         $this->loadCookiesFromRequest($rq);
 
         $this->view->render($rs, 'adminliste.phtml', [
