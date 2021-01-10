@@ -83,7 +83,8 @@ class Item
         $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
 
-        \mywishlist\model\Item::where('idItem', '=', $rq->getParsedBody()['idItem'])
+        //TODO : Modifier l'id par $_GET["idItem"]
+        \mywishlist\model\Item::where('idItem', '=', "2")
             ->update([
                 'itemName' => $itemName,
                 'description' => $description
@@ -133,6 +134,7 @@ class Item
         }
 
         //On met a jour le chemin de l'image dans la BDD
+        //TODO : Modifier l'id par $_GET["idItem"]
         \mywishlist\model\Item::where('idItem', '=', "2") //le idItem est dans l'URL
             ->update([
                 'photoPath' => $target_file
