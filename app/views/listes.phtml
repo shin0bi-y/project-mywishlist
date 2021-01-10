@@ -6,11 +6,12 @@
                 <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
             </div>
             <div class="col">
-                <?php echo 'test' ?>
+                <?php echo 'Expiration :  '.$list->limitDate?>
             </div>
         </div>
     <?php endforeach; ?>
 </div>
+<br/>
 <div class="container">
     <h1>Listes publiques</h1>
     <?php foreach ($publiques as $list) : ?>
@@ -19,7 +20,7 @@
                 <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
             </div>
             <div class="col">
-                <?php echo 'test' ?>
+                <?php echo 'Expiration :  '. $list->limitDate ?>
             </div>
         </div>
     <?php endforeach; ?>
