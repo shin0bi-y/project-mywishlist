@@ -1,18 +1,26 @@
 <div class="container">
     <h1>Vos listes</h1>
-    <div class="row-cols-3">
-        <?php foreach($privates as $list) : ?>
+    <?php foreach ($privates as $list) : ?>
+        <div class="row row-cols-3">
             <div class="col">
-                <?php echo $list->listName ?>
+                <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
             </div>
-        <?php endforeach; ?>
-    </div>
+            <div class="col">
+                <?php echo 'test' ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+<div class="container">
     <h1>Listes publiques</h1>
-    <div class="row-cols-3">
-        <?php foreach ($publiques as $list) : ?>
+    <?php foreach ($publiques as $list) : ?>
+        <div class="row row-cols-3">
             <div class="col">
-                <?php echo $list->listName ?>
+                <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
             </div>
-        <?php endforeach; ?>
-    </div>
+            <div class="col">
+                <?php echo 'test' ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
 </div>
