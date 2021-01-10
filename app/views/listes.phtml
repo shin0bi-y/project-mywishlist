@@ -1,0 +1,18 @@
+<div class="container">
+    <h1>Vos listes</h1>
+    <div class="row-cols-3">
+        <?php foreach($privates as $list) : ?>
+            <div class="col">
+                <?php echo $list->listName ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <h1>Listes publiques</h1>
+    <div class="row-cols-3">
+        <?php foreach ($publiques as $list) : ?>
+            <div class="col">
+                <?php echo $list->listName ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>

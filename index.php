@@ -41,6 +41,8 @@ $app->get('/liste/{id}/admin', \mywishlist\controller\Liste::class . ':getAdminL
 $app->get('/liste/{id}[/]',\mywishlist\controller\Liste::class . ':showListe')
     ->setName("showListe");
 
+$app->get('/listes[/]', \mywishlist\controller\Liste::class . ':showAllList')->setName('showAllList');
+
 //--> Message
 
 $app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMessage')->setName('addMessage');

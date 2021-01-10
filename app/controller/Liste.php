@@ -109,6 +109,18 @@ class Liste
         return $rs;
     }
 
+    public function showAllList(Request $rq, Response $rs, array $args): Response
+    {
+        $publiques = \mywishlist\model\Liste::where('isPublic','=',1)->get();
+        $privates = \mywishlist\model\Liste::where('emailAuthor','=',$_SESSION['user']['email'])->get();
+
+        $this->c->view->render($rs,'listes.phtml',[
+            "publiques" => $publiques,
+            "privates" => $privates
+        ]);
+        return $rs;
+    }
+
     /**
      * Ajoute un message a une liste
      * @param Request $rq
