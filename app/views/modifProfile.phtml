@@ -1,0 +1,32 @@
+<?php if(isset($user)) : ?>
+    <?php if (isset($flash->getMessages()['wrongpassword'])) : ?>
+        <?php foreach ($flash->getMessages()['wrongpassword'] as $m): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong> <?= $m ?></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <div class="container">
+        <h1 class="text-left my-5">Votre compte</h1>
+        <form method="POST" action="<?= $router->pathFor('pageModifyProfile') ?>">
+            <label>Email</label>
+            <input type="text" name="email" class="form-control" id="inputConfirmation" disabled value="<?= $user['email'] ?>">
+            </br>
+            <label>Nom</label>
+            <input type="text" name="name" class="form-control" id="inputConfirmation" value="<?= $user['name'] ?>">
+            </br>
+            <label>Changer de mot de passe</label>
+            <input type="password" name="newPassword" class="form-control" id="inputConfirmation">
+            </br>
+            <label>Indiquer votre mot de passe pour confirmer les changements</label>
+            <input type="password" name="currentPassword" class="form-control" id="inputConfirmation">
+            </br>
+            <button type="submit" class="btn btn-primary float-left">Enregister</button>
+        </form>
+    </div>
+<?php else : ?>
+    <h2 class="text-center my-5">Vous n'êtes pas connecté</h2>
+<?php endif; ?>
