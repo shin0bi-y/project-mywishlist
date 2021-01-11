@@ -4,7 +4,7 @@
         <?php foreach ($privates as $list) : ?>
             <div class="row row-cols-3">
                 <div class="col">
-                    <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
+                    <?php echo "<a href=$rootUri/liste/$list->idList>" . $list->listName . '</a>' ?>
                 </div>
                 <div class="col">
                     <?php if ($list->limitDate < date('Y-m-d H:i:s')) {
@@ -25,7 +25,7 @@
         <?php foreach ($publiques as $list) : ?>
             <div class="row row-cols-3">
                 <div class="col">
-                    <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
+                    <?php echo "<a href=$rootUri/liste/$list->idList>" . $list->listName . '</a>' ?>
                 </div>
                 <div class="col">
                     <?php if ($list->limitDate < date('Y-m-d H:i:s')) {
