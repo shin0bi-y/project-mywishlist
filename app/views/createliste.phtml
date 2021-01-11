@@ -1,4 +1,5 @@
 <body>
+<?php if(isset($user)) : ?>
     <h2 class="text-center my-5">Création de liste</h2>
     <form method="POST" action="<?= $router->pathFor('listeCreate') ?>">
         <div class="form-group">
@@ -20,5 +21,8 @@
         Les champs marqués d'un astérisque sont obligatoires.
         <button type="submit" class="btn btn-primary float-right">Envoyer</button>
     </form>
+<?php else : ?>
+    <h2 class="text-center my-5">Vous n'êtes pas connecté</h2>
+<?php endif; ?>
 </body>
 
