@@ -112,7 +112,9 @@ class Liste
     public function showAllList(Request $rq, Response $rs, array $args): Response
     {
         $publiques = \mywishlist\model\Liste::where('isPublic','=',1)->get();
-        $privates = \mywishlist\model\Liste::where('emailAuthor','=',$_SESSION['user']['email'])->get();
+        if(isset($_SESSION['user'])) {
+            $privates = \mywishlist\model\Liste::where('emailAuthor','=',$_SESSION['user']['email'])->get();
+        }
 
         $this->c->view->render($rs,'listes.phtml',[
             "publiques" => $publiques,
