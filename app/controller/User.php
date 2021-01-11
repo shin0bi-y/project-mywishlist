@@ -115,6 +115,7 @@ class User
                 \mywishlist\model\User::where('email', '=', $email)
                     ->update(['name' => $name]);
                 $_SESSION['user']['name'] = $name;
+                $this->c->flash->addMessage('modifysuccess', 'Le nom d\'utilisateur a été changé.');
             }
 
             //Idem avec le suppose nouveau password
@@ -124,9 +125,9 @@ class User
                 $password_hash = password_hash($newPassword, PASSWORD_DEFAULT);
                 \mywishlist\model\User::where('email', '=', $email)
                     ->update(['password' => $password_hash]);
+                session_unset();
+                $this->c->flash->addMessage('modifysuccess', 'Le mot de passe a été changé. Veuillez vous reconnecter.');
             }
-
-            $this->c->flash->addMessage('modifysuccess', 'Les changements ont été appliqué.');
             $rs = $rs->withRedirect($this->c->router->pathFor("home"));
         } else {
             $this->c->flash->addMessage('wrongpassword', 'Mauvais mot de passe');
