@@ -36,9 +36,10 @@ class Liste
         $listName = $rq->getParsedBody()['listName'];
         $description = $rq->getParsedBody()['description'];
         $limitDate = $rq->getParsedBody()['limitDate'];
-        $public = $rq->getParsedBody()['public'];
-        if ($public == null) $public = 0;
-
+        $public = 0;
+        if(array_key_exists('public', $rq->getParsedBody())) {
+            $public = 1;
+        }
 
         $list = new \mywishlist\model\Liste();
         $list->listName = filter_var($listName, FILTER_SANITIZE_STRING);
