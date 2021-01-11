@@ -1,29 +1,31 @@
-<?php if(isset($_SESSION['user'])): ?>
-<div class="container">
-    <h1>Vos listes</h1>
-    <?php foreach ($privates as $list) : ?>
-        <div class="row row-cols-3">
-            <div class="col">
-                <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
+<?php if (isset($_SESSION['user'])): ?>
+    <div class="container">
+        <h1>Vos listes</h1>
+        <?php foreach ($privates as $list) : ?>
+            <div class="row row-cols-3">
+                <div class="col">
+                    <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
+                </div>
+                <div class="col">
+                    <?php echo 'Expiration :  ' . $list->limitDate ?>
+                </div>
             </div>
-            <div class="col">
-                <?php echo 'Expiration :  '.$list->limitDate?>
-            </div>
-        </div>
-    <?php endforeach; ?>
-</div>
-<br/>
+        <?php endforeach; ?>
+    </div>
+    <br/>
 <?php endif; ?>
-<div class="container">
-    <h1>Listes publiques</h1>
-    <?php foreach ($publiques as $list) : ?>
-        <div class="row row-cols-3">
-            <div class="col">
-                <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
+<?php if ($publiques != null) : ?>
+    <div class="container">
+        <h1>Listes publiques</h1>
+        <?php foreach ($publiques as $list) : ?>
+            <div class="row row-cols-3">
+                <div class="col">
+                    <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
+                </div>
+                <div class="col">
+                    <?php echo 'Expiration :  ' . $list->limitDate ?>
+                </div>
             </div>
-            <div class="col">
-                <?php echo 'Expiration :  '. $list->limitDate ?>
-            </div>
-        </div>
-    <?php endforeach; ?>
-</div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
