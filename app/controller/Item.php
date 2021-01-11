@@ -101,10 +101,6 @@ class Item
      */
     public function modifImageItem(Request $rq, Response $rs, array $args): Response
     {
-        echo "POST : ";
-        var_dump($_POST);
-        echo "<br>FILES : ";
-        var_dump($_FILES);
         $target_dir = "uploads/";
         $target_file = $target_dir . basename($_FILES["submit"]["name"]);
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -121,14 +117,11 @@ class Item
 
         //On verifie l'etat du boolean correctUpload
         if ($correctUpload == false) {
-            echo "<br>not correctUpload ";
             //TODO : rediriger ou afficher une erreur d'upload
         } else {
             if (move_uploaded_file($_FILES["submit"]["tmp_name"], $target_file)) {
-                echo "<br>upload ok ";
                 //TODO : Montrer que l'upload a echoue
             } else {
-                echo "<br>upload ko ";
                 //TODO : Montrer que l'upload a echoue
             }
         }

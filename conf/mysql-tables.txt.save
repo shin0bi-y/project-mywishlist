@@ -69,20 +69,10 @@ create table message (
 /*------*/
 
 create table cagnotte (
-    idItem int PRIMARY KEY,
-    prix double,
-    emailCreator VARCHAR(255),
-    date DATE,
-    FOREIGN KEY fk_emailCreator (emailCreator) references users(email),
-    FOREIGN KEY fk_idItemCagnotte (idItem) references item(idItem)
-);
-
-/*------*/
-
-create table participantCagnotte(
-    idItem int PRIMARY KEY,
-    emailParticipant VARCHAR(255),
-    somme double,
-    FOREIGN KEY fk_emailParticipant (emailParticipant) references users(email),
-    FOREIGN KEY fk_idItemParticipantCagnotte (idItem) references item(idItem)
+    idItem int PRIMARY KEY AUTO_INCREMENT,
+     int,
+    emailUser VARCHAR(255),
+    message varchar(1023),
+    FOREIGN KEY fk_emailUserMessage (emailUser) references users(email),
+    FOREIGN KEY fk_idListMessage (idList) references list(idList)
 );
