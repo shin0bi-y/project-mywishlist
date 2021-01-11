@@ -28,8 +28,8 @@
             </ul>
         </div>
         <div class="d-flex">
-            <?php if(isset($_SESSION['user'])): ?>
-                <a class="dropdown-item" href="<?= $router->pathFor('logout') ?>">Déconnexion</a>
+            <?php if($user): ?>
+                <a class="dropdown-item" href="<?= $router->pathFor('logout') ?>"><strong>Déconnexion</strong> (<?= $user['name'] ?>)</a>
             <?php else: ?>
                 <a class="dropdown-item" href="<?= $router->pathFor('login') ?>">Connexion</a>
                 <a class="dropdown-item" href="<?= $router->pathFor('register') ?>">Inscription</a>
