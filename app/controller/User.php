@@ -96,12 +96,10 @@ class User
      */
     public function modifyProfile(Request $rq, Response $rs, array $args): Response
     {
-        //TODO gerer l'auth (voir cours en ligne sur Arche) pour verifier que le user est connecte et preremplir l'email
-
         //L'email est prerempli et non modifiable
         //Il est visible et grise
         //Il sert a identifier le User qui veut modifier son compte
-        $email = $rq->getParsedBody()['email'];
+        $email = $_SESSION['user']['email'];
 
         //Le currentPassword est un champ obligatoire
         //On le recupere pour verifier que l'action du user
@@ -114,8 +112,9 @@ class User
             if (array_key_exists('name', $rq->getParsedBody()) && $rq->getParsedBody()["name"] !== '') {
                 $name = $rq->getParsedBody()['name'];
                 $name = filter_var($name, FILTER_SANITIZE_STRING);
-                \mywishlist\model\User::where('email', '=', $rq->getParsedBody()['email'])
+                \mywishlist\model\User::where('email', '=', $email)
                     ->update(['name' => $name]);
+                $_SESSION['user']['name'] = $name;
             }
 
             //Idem avec le suppose nouveau password
@@ -123,13 +122,15 @@ class User
                 $newPassword = $rq->getParsedBody()['newPassword'];
                 $newPassword = filter_var($newPassword, FILTER_SANITIZE_STRING);
                 $password_hash = password_hash($newPassword, PASSWORD_DEFAULT);
-                \mywishlist\model\User::where('email', '=', $rq->getParsedBody()['email'])
+                \mywishlist\model\User::where('email', '=', $email)
                     ->update(['password' => $password_hash]);
             }
 
+            $this->c->flash->addMessage('modifysuccess', 'Les changements ont été appliqué.');
+            $rs = $rs->withRedirect($this->c->router->pathFor("home"));
         } else {
-            //TODO : afficher une erreur pour mauvais mot de passe courant (currentPassword)
-            echo "bad password";
+            $this->c->flash->addMessage('wrongpassword', 'Mauvais mot de passe');
+            $rs = $rs->withRedirect($this->c->router->pathFor('pageModifyProfile'));
         }
 
         return $rs;
@@ -165,7 +166,7 @@ class User
                 } else {
                     //sinon on previent le user que le mdp n'est pas bon
                     $this->c->flash->addMessage('wrongpassword', 'Mauvais mot de passe');
-                    $rs = $rs->withRedirect($this->c->router->pathFor('pageDelete'));
+                    $rs = $rs->withRedirect($this->c->router->pathFor('pageDeleteProfile'));
                 }
             }
         } else {
