@@ -48,6 +48,7 @@ class User
             $user->email = filter_var($email, FILTER_VALIDATE_EMAIL);
             $user->password = filter_var($password_hash, FILTER_SANITIZE_STRING);
             $user->save();
+            $this->c->flash->addMessage('goodregister', 'Votre compte a été créé. Vous pouvez vous connecter à l\'aide du bouton "Connexion".');
             $rs = $rs->withRedirect($this->c->router->pathFor("home"));
 
             //TODO : l'insertion de l'email peut produire une erreur car PrimaryKey

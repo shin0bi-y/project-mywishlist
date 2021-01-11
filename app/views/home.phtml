@@ -9,6 +9,16 @@
     </div>
 <?php endforeach; ?>
 <?php endif; ?>
+<?php if (isset($flash->getMessages()['goodregister'])) : ?>
+    <?php foreach ($flash->getMessages()['goodregister'] as $m): ?>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong> <?= $m ?></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 <div class="header">
     <div class="container">
         <div class="navbar">
