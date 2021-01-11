@@ -1,3 +1,4 @@
+<?php if(isset($_SESSION['user'])): ?>
 <div class="container">
     <h1>Vos listes</h1>
     <?php foreach ($privates as $list) : ?>
@@ -12,6 +13,7 @@
     <?php endforeach; ?>
 </div>
 <br/>
+<?php endif; ?>
 <div class="container">
     <h1>Listes publiques</h1>
     <?php foreach ($publiques as $list) : ?>
