@@ -76,11 +76,10 @@ class User
                 $rs = $rs->withRedirect($this->c->router->pathFor("home"));
                 $_SESSION['user'] = array();
                 $_SESSION['user']['email'] = $email;
+            }else {
+                $this->c->flash->addMessage('badlogin', 'Vos informations de connexion sont erronées.');
+                $rs = $rs->withRedirect($this->c->router->pathFor("pageLogin"));
             }
-            //TODO : rediriger vers le bon endroit
-        } else {
-            echo "bruh";
-            //TODO : afficher erreur car un champ est mal rempli
         }
 
         return $rs;

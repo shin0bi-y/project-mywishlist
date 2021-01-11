@@ -1,4 +1,14 @@
 <body>
+<?php if (isset($flash->getMessages()['badlogin'])) : ?>
+    <?php foreach ($flash->getMessages()['badlogin'] as $m): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong> <?= $m ?></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 <h2 class="text-center my-5">Login</h2>
 <form method="POST" action="<?= $router->pathFor('login') ?>">
     <div class="form-group">
