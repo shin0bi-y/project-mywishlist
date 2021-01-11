@@ -12,7 +12,7 @@
     <?php endif; ?>
     <h1 class="text-center my-5">Suppression du compte</h1>
     <p class="text-center my-5">Attention, la suppression du compte entraine la suppression de vos listes</p>
-        <form method="POST" action="<?= $router->pathFor('pageDelete') ?>">
+        <form method="POST" action="<?= $router->pathFor('pageDeleteProfile') ?>">
             <div class="form-group">
                 <label>Tapez votre mot de passe pour valider</label>
                 <input type="text" name="password" class="form-control" id="inputConfirmation" required>
