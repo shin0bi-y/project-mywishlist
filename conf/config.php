@@ -8,7 +8,8 @@ $config = [
         $vars = [
             "rootUri" => $container->request->getUri()->getBasePath(),
             "router" => $container->router,
-            "user" => isset($_SESSION['user']) ? $_SESSION['user'] : null
+            "user" => isset($_SESSION['user']) ? $_SESSION['user'] : null,
+            'flash' => new Slim\Flash\Messages()
         ];
         $renderer = new PhpRenderer(__DIR__ . '/../app/views', $vars);
         $renderer->setLayout("layout.phtml");

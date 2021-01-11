@@ -158,8 +158,8 @@ class User
                 if (password_verify($password, $password_hash[0])) {
                     //si il est bon, on supprime le compte
                     \mywishlist\model\User::where('email', '=', $email)->delete();
-                    $this->c->flash->addMessage('deletesuccess', 'Votre compte a été supprimé');
                     session_unset();
+                    $this->c->flash->addMessage('deletesuccess', 'Votre compte a été supprimé');
                     $rs = $rs->withRedirect($this->c->router->pathFor("home"));
                 } else {
                     //sinon on previent le user que le mdp n'est pas bon
