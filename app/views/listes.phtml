@@ -7,7 +7,12 @@
                     <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
                 </div>
                 <div class="col">
-                    <?php echo 'Expiration :  ' . $list->limitDate ?>
+                    <?php if ($list->limitDate < date('Y-m-d H:i:s')) {
+                        echo 'Expirée';
+                    } else {
+                        echo 'Expiration :  ' . $list->limitDate;
+                    }
+                    ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -23,7 +28,12 @@
                     <?php echo "<a href=/liste/$list->idList>" . $list->listName . '</a>' ?>
                 </div>
                 <div class="col">
-                    <?php echo 'Expiration :  ' . $list->limitDate ?>
+                    <?php if ($list->limitDate < date('Y-m-d H:i:s')) {
+                        echo 'Expirée';
+                    } else {
+                        echo 'Expiration :  ' . $list->limitDate;
+                    }
+                    ?>
                 </div>
             </div>
         <?php endforeach; ?>

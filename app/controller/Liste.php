@@ -49,9 +49,7 @@ class Liste
         $list->limitDate = $limitDate;
         $list->isPublic = $public;
         $list->save();
-
-        $name = $rq->getParsedBody()['listName'];
-        $rs->getBody()->write("<h1>nom : $name</h1>"); //TODO: faire l'affichage
+        $rs = $rs->withRedirect($this->c->router->pathFor("home"));
         return $rs;
     }
 
