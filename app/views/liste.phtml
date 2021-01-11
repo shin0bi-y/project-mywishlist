@@ -1,32 +1,74 @@
 <?php if ($liste->limitDate > date('Y-m-d H:i:s')): ?>
-    <div class="container">
-        <div class="row">
-            <h1><?php echo $liste->listName ?></h1>
+    <div class="card text-center">
+        <div class="card-header">
+            Votre liste
+        </div>
+        <div class="card-body">
+            <h5 class="card-title"> <?= $liste->listName ?> </h5>
+            <p class="card-text"> <?= $liste->description?> </p>
+            <?php if($liste->isPublic==1): ?>
+            <p> Liste publique </p>
+            <?php else : ?>
+            <p> Liste privée</p>
+            <?php endif; ?>
+            <a data-toggle="modal" href="#addItem" class="btn btn-primary">Ajouter un item</a>
+        </div>
+        <div class="card-footer text-muted">
+            Crée le <?= $liste->creationDate ?> - Expire le <?= $liste->limitDate ?>
         </div>
         <div class="row">
-            <div class="col">
-                <?php echo $liste->description?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <br/>
-                <?php if($liste->isPublic==1) echo 'Publique : Oui'; else echo 'Publique : Non';?>
-            </div>
-            <div class="col">
-                <br/>
-                <?php echo 'Date d\'expiration : ' . $liste->limitDate ?>
-            </div>
-        </div>
-        <div class="row row-cols-3">
             <?php foreach($items as $item) :?>
-            <div class="col">
-                <br/>
-                <?php echo $item->itemName?>
-            </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $item->itemName ?></h5>
+                            <p class="card-text"><?= $item->description ?></p>
+                            <a href="#" class="btn btn-primary">Modifier</a>
+                            <a href="#" class="btn btn-danger">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
             <?php endforeach;?>
         </div>
     </div>
 <?php else: ?>
     Liste expirée
 <?php endif; ?>
+<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Création d'objet</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="<?= $router->pathFor('itemCreate') ?>">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputName">Nom*</label>
+                        <input type="text" name="name" class="form-control" id="inputName" placeholder="Nom de l'objet" value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputDesc">Description</label>
+                        <textarea class="form-control" id="inputDesc" rows="3" name="desc"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputUrl">Lien pour plus d'information</label>
+                        <input type="url" name="url" class="form-control" id="inputUrl" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPrice">Prix*</label>
+                        <input type="number" step="0.01" min="0" class="form-control" id="inputPrice" name="prix" value="" required>
+                    </div>
+                    Les champs marqués d'un astérisque sont obligatoires.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
