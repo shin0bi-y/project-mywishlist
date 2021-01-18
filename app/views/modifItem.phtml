@@ -10,7 +10,7 @@
 
 <br><br><br>
 
-<form method="POST" action="<?= $router->pathFor('itemModif') ?>">
+<form method="POST" action="<?= $router->pathFor('itemModif', ['id'=> $id, 'idItem' => $idItem])?>">
     <div class="form-group">
         <label for="inputTitle">Nom*</label>
         <input type="text" name="itemName" class="form-control" id="inputTitle" required>

@@ -33,20 +33,23 @@ class Item
         $item = new \mywishlist\model\Item();
 
         //Les param suivants sont obligatoires dans le form du front donc pas de verification en backend
-        $idList = $_GET['idList'];
-        $itemName = $rq->getParsedBody()['itemName'];
-        $description = $rq->getParsedBody()['description'];
+        $idList = $args['id'];
+        $itemName = $rq->getParsedBody()['name'];
+        $description = $rq->getParsedBody()['desc'];
+        $cout = $rq->getParsedBody()['prix'];
         //$photoPath = $rq->getParsedBody()['photoPath'];
-        $emailUser = 'jean@hotmail.com'; //TODO : Recup l'email depuis SESSION
+        $emailUser = $_SESSION['user']['email'];
 
         $item->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
         $item->itemName = filter_var($itemName, FILTER_SANITIZE_STRING);
         $item->description = filter_var($description, FILTER_SANITIZE_STRING);
+        $item->cout = filter_var($cout, FILTER_SANITIZE_NUMBER_FLOAT);
         $item->photoPath = null; //filter_var($photoPath, FILTER_SANITIZE_URL); On entre ca plus tard avec modifPhotoPath et un upload
         $item->emailUser = filter_var($emailUser, FILTER_SANITIZE_EMAIL);
 
         $item->save();
 
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $idList]));
         return $rs;
     }
 
@@ -80,15 +83,16 @@ class Item
     public function modifItem(Request $rq, Response $rs, array $args): Response
     {
         //Ici, on ne modifie que le nom et la description
+        $id = $args['id'];
         $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
 
-        //TODO : Modifier l'id par $_GET["idItem"]
-        \mywishlist\model\Item::where('idItem', '=', "2")
+        \mywishlist\model\Item::where('idItem', '=', $args['idItem'])
             ->update([
                 'itemName' => $itemName,
                 'description' => $description
             ]);
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;
     }
 
@@ -168,10 +172,13 @@ class Item
      */
     public function deleteItem(Request $rq, Response $rs, array $args): Response
     {
-        //TODO: verif que la personne voulant delete est l'auteur de la liste contenant l'item
-        $id = filter_var($rq->getParsedBody()['idItem'],FILTER_SANITIZE_NUMBER_INT);
-        \mywishlist\model\Item::where('idItem','=',$id)->delete();
+        $id = filter_var($rq->getParsedBody()['id'],FILTER_SANITIZE_NUMBER_INT);
+        $idItem = filter_var($rq->getParsedBody()['id'],FILTER_SANITIZE_NUMBER_INT);
+        $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
+        $emailUser = $_SESSION['user']['email'];
 
+        if ($liste->emailAuthor == $emailUser) \mywishlist\model\Item::where('idItem','=',$idItem)->delete();
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;
     }
 }

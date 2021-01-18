@@ -49,25 +49,21 @@ $app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMe
 
 //--> Item
 
-$app->get('/item/create[/]', function (Request $request, Response $response, array $args) {
-    $this->view->render($response, 'createItem.phtml');
-})->setName('pageItemCreate');
-
-$app->post('/item/item_created[/]',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
+$app->post('/item/item_created/{id}',\mywishlist\controller\Item::class . ':createItem')->setName("itemCreate");
 
 $app->get('/item[/]', \mywishlist\controller\Item::class . ':showItem')->setName("showItem");
 
-$app->get('/item/modification[/]', function (Request $request, Response $response, array $args) {
-    $this->view->render($response, 'modifItem.phtml');
+$app->get('/liste/{id}/item/{idItem}/modification/', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'modifItem.phtml', ['id'=>$args['id'], 'idItem'=>$args['idItem']]);
 })->setName("pageModifItem");
 
-$app->post('/item/modification_done[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
+$app->post('/liste/{id}/item/{idItem}/modification_done[/]',\mywishlist\controller\Item::class . ':modifItem')->setName("itemModif");
 
 $app->post('/item/image[/]',\mywishlist\controller\Item::class . ':modifImageItem')->setName("itemImageModif");
 
 $app->post('/item/image/delete[/]',\mywishlist\controller\Item::class . ':deleteImageItem')->setName("deleteImageItem");
 
-$app->post('/item/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
+$app->post('/liste/{id}/item/{idItem}/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 
 //--> Users
 
