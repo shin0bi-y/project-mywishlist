@@ -11,6 +11,8 @@ class Item
 {
 
     private \Slim\Container $c;
+    private int $countImage;
+    private string $target_dir = "uploads/";
 
     /**
      * Item controller constructor.
@@ -19,6 +21,7 @@ class Item
     public function __construct(\Slim\Container $c)
     {
         $this->c = $c;
+        $this->countImage = 0;
     }
 
     /**
@@ -99,7 +102,7 @@ class Item
                     'description' => $description
                 ]);
         }
-        
+
         $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;
     }
@@ -113,9 +116,8 @@ class Item
      */
     public function modifImageItem(Request $rq, Response $rs, array $args): Response
     {
-        $target_dir = "uploads/";
-        $target_file = $target_dir . basename($_FILES["submit"]["name"]);
-        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+        $target_file = basename($_FILES["submit"]["name"]);
+        $imageFileType = strtolower(pathinfo($this->target_dir . $target_file,PATHINFO_EXTENSION));
 
         //vaut 1 si le fichier a upload (image) est conforme
         //vaut 0 dans le cas contraire (exemple : fichier .php et non .jpg)
@@ -131,9 +133,13 @@ class Item
         if ($correctUpload == false) {
             //TODO : rediriger ou afficher une erreur d'upload
         } else {
-            if (move_uploaded_file($_FILES["submit"]["tmp_name"], $target_file)) {
-                //TODO : Montrer que l'upload a echoue
-            } else {
+            //On fait attention a ne pas overwrite une image deja presente sous le meme nom
+            //pour cela, on ajoute le temps a la fin du nom du fichier.
+            $newname = explode(".", $target_file);
+            $newname[0] = $newname[0] . time();
+            $target_file = implode(".", $newname);
+
+            if(!move_uploaded_file($_FILES["submit"]["tmp_name"], $this->target_dir . $target_file)) {
                 //TODO : Montrer que l'upload a echoue
             }
         }
@@ -142,7 +148,7 @@ class Item
         $idItem = $args['idItem'];
         \mywishlist\model\Item::where('idItem', '=', $idItem) //le idItem est dans l'URL
             ->update([
-                'photoPath' => urlencode($target_file)
+                'photoPath' => urlencode($this->target_dir . $target_file)
             ]);
 
         //On redirect vers la liste
@@ -165,6 +171,7 @@ class Item
         $target_file = \mywishlist\model\Item::query()->select("photoPath")->where('idItem', '=', $idItem)
             ->pluck("photoPath");
 
+        //On recupere seulement le path
         $target_file = str_replace('"', "", $target_file);
         $target_file = str_replace('[', "", $target_file);
         $target_file = str_replace(']', "", $target_file);
