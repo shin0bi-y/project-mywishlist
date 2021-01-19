@@ -22,7 +22,7 @@ select * from users;
 /*------*/
 
 create table list(
-    idList int PRIMARY KEY AUTO_INCREMENT,
+    idList VARCHAR(255) PRIMARY KEY,
     listName VARCHAR(255),
     emailAuthor VARCHAR(255),
     description VARCHAR(1024),
@@ -40,7 +40,7 @@ select * from list;
 
 create table item(
     idItem int PRIMARY KEY AUTO_INCREMENT,
-    idList int,
+    idList VARCHAR(255),
     itemName VARCHAR(255),
     description VARCHAR(1024),
     photoPath VARCHAR(255),
@@ -58,7 +58,7 @@ select * from item;
 
 create table message (
     idMessage int PRIMARY KEY AUTO_INCREMENT,
-    idList int,
+    idList VARCHAR(255),
     emailUser VARCHAR(255),
     message varchar(1023),
     date DATE,
