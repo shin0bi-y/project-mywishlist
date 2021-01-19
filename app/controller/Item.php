@@ -37,7 +37,6 @@ class Item
         $itemName = $rq->getParsedBody()['name'];
         $description = $rq->getParsedBody()['desc'];
         $cout = $rq->getParsedBody()['prix'];
-        //$photoPath = $rq->getParsedBody()['photoPath'];
         $emailUser = $_SESSION['user']['email'];
 
         $item->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
@@ -69,7 +68,7 @@ class Item
         $itemName = $row['itemName'];
         $description = $row['description'];
 
-        $rs->getBody()->write("<h1>$itemName</h1> $description </br> flemme de mettre les autres");
+        $rs->getBody()->write("<h1>$itemName</h1> $description </br>");
         return $rs;
     }
 
@@ -131,11 +130,15 @@ class Item
         }
 
         //On met a jour le chemin de l'image dans la BDD
-        //TODO : Modifier l'id par $_GET["idItem"]
-        \mywishlist\model\Item::where('idItem', '=', "2") //le idItem est dans l'URL
+        $idItem = $args['idItem'];
+        \mywishlist\model\Item::where('idItem', '=', $idItem) //le idItem est dans l'URL
             ->update([
                 'photoPath' => $target_file
             ]);
+
+        //On redirect vers la liste
+        $id = $args['id'];
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;
     }
 

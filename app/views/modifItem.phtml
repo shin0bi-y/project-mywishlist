@@ -1,7 +1,7 @@
 <body>
 <h2 class="text-center my-5">Modification d'item</h2>
 
-<form method="POST" action="<?= $router->pathFor('itemImageModif') ?>" enctype="multipart/form-data">
+<form method="POST" action="<?= $router->pathFor('itemImageModif', ['id'=> $id, 'idItem' => $idItem]) ?>" enctype="multipart/form-data">
     <div class="file-loading">
         <input id="bfupload-b7" name="submit" multiple type="file" class="file" data-allowed-file-extensions='["png", "jpg", "jpeg"]'>
     </div>
