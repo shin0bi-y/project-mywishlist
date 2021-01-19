@@ -5,8 +5,12 @@
     <div class="file-loading">
         <input id="bfupload-b7" name="submit" multiple type="file" class="file" data-allowed-file-extensions='["png", "jpg", "jpeg"]' required>
     </div>
+    <br>
+    <br>
     <button type="submit" class="btn btn-primary float-md-right">Modifier l'image</button>
 </form>
+<br>
+<br>
 <form method="POST" action="<?= $router->pathFor('deleteImageItem', ['id'=> $id, 'idItem' => $idItem]) ?>">
     <button type="submit" class="btn btn-danger float-md-right">Supprimer l'image</button>
 </form>
