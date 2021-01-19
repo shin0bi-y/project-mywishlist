@@ -118,6 +118,7 @@ class Item
     {
         $target_file = basename($_FILES["submit"]["name"]);
         $imageFileType = strtolower(pathinfo($this->target_dir . $target_file,PATHINFO_EXTENSION));
+        $idItem = $args['idItem'];
 
         //vaut 1 si le fichier a upload (image) est conforme
         //vaut 0 dans le cas contraire (exemple : fichier .php et non .jpg)
@@ -131,7 +132,7 @@ class Item
 
         //On verifie l'etat du boolean correctUpload
         if ($correctUpload == false) {
-            //TODO : rediriger ou afficher une erreur d'upload
+            $this->c->flash->addMessage('badregister', "L'upload a echoue...");
         } else {
             //On fait attention a ne pas overwrite une image deja presente sous le meme nom
             //pour cela, on ajoute le temps a la fin du nom du fichier.
@@ -140,16 +141,27 @@ class Item
             $target_file = implode(".", $newname);
 
             if(!move_uploaded_file($_FILES["submit"]["tmp_name"], $this->target_dir . $target_file)) {
-                //TODO : Montrer que l'upload a echoue
+                $this->c->flash->addMessage('badregister', "L'upload a echoue...");
             }
-        }
+            
+            //On supprime l'ancienne image
+            $old = \mywishlist\model\Item::query()->select("photoPath")->where('idItem', '=', $idItem)
+                ->pluck("photoPath");
 
-        //On met a jour le chemin de l'image dans la BDD
-        $idItem = $args['idItem'];
-        \mywishlist\model\Item::where('idItem', '=', $idItem) //le idItem est dans l'URL
+            //On recupere seulement le path
+            $old = str_replace('"', "", $old);
+            $old = str_replace('[', "", $old);
+            $old = str_replace(']', "", $old);
+            $old = urldecode($old);
+
+            unlink($old);
+
+            //On met a jour le chemin de l'image dans la BDD
+            \mywishlist\model\Item::where('idItem', '=', $idItem) //le idItem est dans l'URL
             ->update([
                 'photoPath' => urlencode($this->target_dir . $target_file)
             ]);
+        }
 
         //On redirect vers la liste
         $id = $args['id'];
