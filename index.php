@@ -61,7 +61,7 @@ $app->post('/liste/{id}/item/{idItem}/modification_done[/]',\mywishlist\controll
 
 $app->post('/liste/{id}/item/{idItem}/image_done[/]',\mywishlist\controller\Item::class . ':modifImageItem')->setName("itemImageModif");
 
-$app->post('/item/image/delete[/]',\mywishlist\controller\Item::class . ':deleteImageItem')->setName("deleteImageItem");
+$app->post('/liste/{id}/item/{idItem}/image/delete[/]',\mywishlist\controller\Item::class . ':deleteImageItem')->setName("deleteImageItem");
 
 $app->post('/liste/{id}/item/{idItem}/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 

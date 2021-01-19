@@ -133,7 +133,7 @@ class Item
         $idItem = $args['idItem'];
         \mywishlist\model\Item::where('idItem', '=', $idItem) //le idItem est dans l'URL
             ->update([
-                'photoPath' => $target_file
+                'photoPath' => urlencode($target_file)
             ]);
 
         //On redirect vers la liste
@@ -151,18 +151,28 @@ class Item
      */
     public function deleteImageItem(Request $rq, Response $rs, array $args): Response
     {
+        $idItem = $args['idItem'];
         //On recupere le path de l'image a supprimer
-        $target_file = \mywishlist\model\Item::query()->select("photoPath")->where('idItem', '=', $rq->getParsedBody()['idItem'])
-            ->get("photoPath");
+        $target_file = \mywishlist\model\Item::query()->select("photoPath")->where('idItem', '=', $idItem)
+            ->pluck("photoPath");
+
+        $target_file = str_replace('"', "", $target_file);
+        $target_file = str_replace('[', "", $target_file);
+        $target_file = str_replace(']', "", $target_file);
+        $target_file = urldecode($target_file);
 
         //On supprime l'image a supprimer
         unlink($target_file);
 
         //On met a jour la table
-        \mywishlist\model\Item::where('idItem', '=', $rq->getParsedBody()['idItem'])
+        \mywishlist\model\Item::where('idItem', '=', $idItem)
             ->update([
                 'photoPath' => null
             ]);
+
+        //On redirige vers la liste
+        $id = $args['id'];
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;
     }
 
