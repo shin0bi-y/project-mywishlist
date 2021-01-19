@@ -86,11 +86,20 @@ class Item
         $itemName = $rq->getParsedBody()['itemName'];
         $description = $rq->getParsedBody()['description'];
 
-        \mywishlist\model\Item::where('idItem', '=', $args['idItem'])
-            ->update([
-                'itemName' => $itemName,
-                'description' => $description
-            ]);
+        if ($itemName !== ""){
+            \mywishlist\model\Item::where('idItem', '=', $args['idItem'])
+                ->update([
+                    'itemName' => $itemName
+                ]);
+        }
+
+        if ($description !== "") {
+            \mywishlist\model\Item::where('idItem', '=', $args['idItem'])
+                ->update([
+                    'description' => $description
+                ]);
+        }
+        
         $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;
     }
@@ -185,8 +194,8 @@ class Item
      */
     public function deleteItem(Request $rq, Response $rs, array $args): Response
     {
-        $id = filter_var($rq->getParsedBody()['id'],FILTER_SANITIZE_NUMBER_INT);
-        $idItem = filter_var($rq->getParsedBody()['id'],FILTER_SANITIZE_NUMBER_INT);
+        $idItem = filter_var($args['idItem'],FILTER_SANITIZE_NUMBER_INT);
+        $id = filter_var($args['id'],FILTER_SANITIZE_NUMBER_INT);
         $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
         $emailUser = $_SESSION['user']['email'];
 

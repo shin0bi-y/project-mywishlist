@@ -63,7 +63,7 @@ $app->post('/liste/{id}/item/{idItem}/image_done[/]',\mywishlist\controller\Item
 
 $app->post('/liste/{id}/item/{idItem}/image/delete[/]',\mywishlist\controller\Item::class . ':deleteImageItem')->setName("deleteImageItem");
 
-$app->post('/liste/{id}/item/{idItem}/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
+$app->get('/liste/{id}/item/{idItem}/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 
 //--> Users
 
