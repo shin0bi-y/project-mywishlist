@@ -42,7 +42,7 @@ class Liste
         }
 
         $list = new \mywishlist\model\Liste();
-        $list->idList = bin2hex(openssl_random_pseudo_bytes(32));
+        $list->idList = rand(1,10000000000);//bin2hex(openssl_random_pseudo_bytes(32));
         $list->listName = filter_var($listName, FILTER_SANITIZE_STRING);
         $list->emailAuthor = $_SESSION['user']['email'];
         $list->description = filter_var($description, FILTER_SANITIZE_STRING);
