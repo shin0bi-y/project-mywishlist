@@ -27,8 +27,15 @@
                             <p><img src="<?= "/" . $item->photoPath ?>" width="100px" height="100px"></p>
                             <?php endif; ?>
                             <p class="card-text"><?= $item->cout ?> $</p>
-                            <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-primary">Modifier</a>
-                            <a href="<?= $router->pathFor('deleteItem', ['id'=>$liste->idList,'idItem' => $item->idItem])?>" class="btn btn-danger">Supprimer</a>
+                            <?php if(isset($_SESSION['user'])):?>
+                                <?php if($_SESSION['user']['email']== $liste->emailAuthor): ?>
+                                    <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-primary">Modifier</a>
+                                    <a href="<?= $router->pathFor('deleteItem', ['id'=>$liste->idList,'idItem' => $item->idItem])?>" class="btn btn-danger">Supprimer</a>
+                                <?php else : ?>
+                                    <a href="#" class="btn btn-primary"> Réserver </a> <!-- href de reservation d'item à mettre -->
+                                    <a href="#" class="btn btn-danger"> Participer à la cagnotte </a> <!-- href de cagnotte à mettre -->
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
