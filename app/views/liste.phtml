@@ -26,6 +26,7 @@
                             <?php if($item->photoPath !== null): ?>
                             <p><img src="<?= "/" . $item->photoPath ?>" width="100px" height="100px"></p>
                             <?php endif; ?>
+                            <p class="card-text"><?= $item->cout ?> $</p>
                             <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-primary">Modifier</a>
                             <a href="<?= $router->pathFor('deleteItem', ['id'=>$liste->idList,'idItem' => $item->idItem])?>" class="btn btn-danger">Supprimer</a>
                         </div>

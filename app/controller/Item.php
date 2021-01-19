@@ -202,11 +202,28 @@ class Item
     public function deleteItem(Request $rq, Response $rs, array $args): Response
     {
         $idItem = filter_var($args['idItem'],FILTER_SANITIZE_NUMBER_INT);
+        $item = \mywishlist\model\Item::where('idItem', '=', $idItem)->first();
+
+        //On supprime l'image de l'item a supprimer
+        if (!$item->photoPath == null){
+            $target_file = $item->photoPath;
+
+            //On recupere seulement le path
+            $target_file = str_replace('"', "", $target_file);
+            $target_file = str_replace('[', "", $target_file);
+            $target_file = str_replace(']', "", $target_file);
+            $target_file = urldecode($target_file);
+
+            unlink($target_file);
+        }
+
         $id = filter_var($args['id'],FILTER_SANITIZE_NUMBER_INT);
         $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
         $emailUser = $_SESSION['user']['email'];
 
-        if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1) \mywishlist\model\Item::where('idItem','=',$idItem)->delete();
+        if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1)
+            $item->delete();
+
         $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;
     }
