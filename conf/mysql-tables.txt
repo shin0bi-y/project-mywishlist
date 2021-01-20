@@ -80,7 +80,8 @@ create table cagnotte (
 /*------*/
 
 create table participantCagnotte(
-    idItem int PRIMARY KEY,
+    idParticipation int PRIMARY KEY AUTO_INCREMENT,
+    idItem int,
     emailParticipant VARCHAR(255),
     somme double,
     FOREIGN KEY fk_emailParticipant (emailParticipant) references users(email),

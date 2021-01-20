@@ -101,6 +101,10 @@ $app->get('/liste/{id}/item/{idItem}/cagnotte/', \mywishlist\controller\Cagnotte
 $app->post('/liste/{id}/item/{idItem}/cagnotte/created',\mywishlist\controller\Cagnotte::class . ':createCagnotte')
     ->setName("cagnotteCreate");
 
+$app->post('/liste/{id}/item/{idItem}/cagnotte/contributed',\mywishlist\controller\Cagnotte::class . ':participer')
+    ->setName("participerCagnotte");
+
+
 //--> Run
 
 $app->run();

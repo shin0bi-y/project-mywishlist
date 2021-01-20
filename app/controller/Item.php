@@ -236,8 +236,15 @@ class Item
 
 
         if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1){
+            $participants = \mywishlist\model\Participant::where('idItem', '=', $idItem)->get();
+            if ($participants !== null){
+                foreach ($participants as $participant){
+                    $participant->delete();
+                }
+            }
             $cagnotte = \mywishlist\model\Cagnotte::where('idItem', '=', $idItem)->first();
-            $cagnotte->delete();
+            if ($cagnotte !== null)
+                $cagnotte->delete();
             $item->delete();
         }
 
