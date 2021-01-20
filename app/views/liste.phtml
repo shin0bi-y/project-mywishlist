@@ -67,6 +67,7 @@
                                        class="btn btn-danger">Supprimer</a>
                                 <?php endif; ?>
                                 <?php if($item->emailUser !== null):?>
+                                    <br><br>
                                     <p class="card-text" style="text-decoration: underline">Message de réservation : </p>
                                     <label><?= \mywishlist\model\Item::query()->select("messageRes")->where('idItem', '=', $item->idItem)->pluck("messageRes")[0] ?></label>
                                 <?php endif; ?>

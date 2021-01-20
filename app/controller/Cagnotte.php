@@ -23,6 +23,13 @@ class Cagnotte
         $this->c = $c;
     }
 
+    /**
+     * Methode de creation d'une cagnotte pour un item donne
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function createCagnotte(Request $rq, Response $rs, array $args): Response
     {
         $cagnotte = new \mywishlist\model\Cagnotte();
@@ -39,9 +46,16 @@ class Cagnotte
         return $rs;
     }
 
+    /**
+     * Methode d'affichage d'une cagnotte
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function showCagnotte(Request $rq, Response $rs, array $args): Response
     {
-        $cagnotte = \mywishlist\model\Cagnotte::query()->select("idItem")->where("idItem", "=", $args["idItem"])->pluck("idItem")[0];
+        $cagnotte = \mywishlist\model\Cagnotte::query()->select("idItem")->where("idItem", "=", $args["idItem"])->first();
         $prix = \mywishlist\model\Item::query()->select("cout")->where('idItem', '=', $args["idItem"])->pluck("cout")[0];
         $itemName = \mywishlist\model\Item::query()->select("itemName")->where('idItem', '=', $args["idItem"])->pluck("itemName")[0];
         $photoPath = \mywishlist\model\Item::query()->select("photoPath")->where('idItem', '=', $args["idItem"])->pluck("photoPath")[0];
@@ -73,6 +87,13 @@ class Cagnotte
         return $rs;
     }
 
+    /**
+     * Methode de participation a une cagnotte existante
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function participer(Request $rq, Response $rs, array $args): Response
     {
         $participation = new \mywishlist\model\Participant();
