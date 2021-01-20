@@ -191,6 +191,13 @@ class User
         return $rs;
     }
 
+    /**
+     * Deconnecte l'utilisateur
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function logout(Request $rq, Response $rs, array $args): Response
     {
         session_unset();

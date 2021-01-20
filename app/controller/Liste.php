@@ -109,6 +109,13 @@ class Liste
         return $rs;
     }
 
+    /**
+     * Affiche toutes les listes disponibles à l'utlisateur (ses listes et les listes publiques)
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function showAllList(Request $rq, Response $rs, array $args): Response
     {
         $publiques = \mywishlist\model\Liste::where('isPublic','=',1)->get();
