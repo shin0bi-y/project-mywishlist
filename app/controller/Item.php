@@ -245,6 +245,13 @@ class Item
         return $rs;
     }
 
+    /**
+     * Methode de reservation d'un item avec l'email du reserveur
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function addReservation(Request $rq, Response $rs, array $args): Response
     {
         $id = $args['id'];
