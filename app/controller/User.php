@@ -171,7 +171,7 @@ class User
             //on verifie son password
             if ($password_hash[0] != '') {
                 if (password_verify($password, $password_hash[0])) {
-                    if(sizeof(\mywishlist\model\Item::select('emailUser', '=', $email)->pluck('emailUser')) > 0) {
+                    if(sizeof(\mywishlist\model\Item::query()->select('emailUser')->where("emailUser", '=', $email)->pluck('emailUser')) > 0) {
                         \mywishlist\model\Item::where('emailUser', '=', $email)->delete();
                     }
                     \mywishlist\model\Participant::where('emailParticipant', '=', $email)->delete();
