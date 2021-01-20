@@ -109,6 +109,13 @@ class Liste
         return $rs;
     }
 
+    /**
+     * Affiche toutes les listes disponibles à l'utlisateur (ses listes et les listes publiques)
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function showAllList(Request $rq, Response $rs, array $args): Response
     {
         $publiques = \mywishlist\model\Liste::where('isPublic','=',1)->get();
@@ -145,21 +152,6 @@ class Liste
         $msg->date = $date;
 
         $msg->save();
-        return $rs;
-    }
-
-    public function getAdminListe(Request $rq, Response $rs, array $args): Response
-    {
-        $liste = \mywishlist\model\Liste::where(['idList' => $args['id']])->firstOrFail();
-        $this->loadCookiesFromRequest($rq);
-
-        $this->view->render($rs, 'adminliste.phtml', [
-            "liste" => $liste,
-            "items" => $liste->items()->get(),
-            "uri" => $rq->getUri()
-            //"flash" => $this->flash->getMessages(),
-            //"showRes" => $this->getShowRes()
-        ]);
         return $rs;
     }
 }

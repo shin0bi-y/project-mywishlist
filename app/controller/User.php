@@ -2,6 +2,7 @@
 
 namespace mywishlist\controller;
 
+use Illuminate\Database\QueryException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -47,11 +48,17 @@ class User
             $user->name = filter_var($name, FILTER_SANITIZE_STRING);
             $user->email = filter_var($email, FILTER_VALIDATE_EMAIL);
             $user->password = filter_var($password_hash, FILTER_SANITIZE_STRING);
-            $user->save();
-            $this->c->flash->addMessage('goodregister', 'Votre compte a été créé. Vous pouvez vous connecter à l\'aide du bouton "Connexion".');
+            try {
+                $user->save();
+                $this->c->flash->addMessage('goodregister', 'Votre compte a été créé. Vous pouvez vous connecter à l\'aide du bouton "Connexion".');
+                $rs = $rs->withRedirect($this->c->router->pathFor("home"));
+            } catch (QueryException $e) {
+                $this->c->flash->addMessage('mailexistant', 'Inscription impossible, l\'email utilisé est déjà utilisé');
+                $rs = $rs->withRedirect($this->c->router->pathFor("home"));
+            }
+        } else {
+            $this->c->flash->addMessage('mailnonconforme', 'Inscription impossible (mail non conforme)');
             $rs = $rs->withRedirect($this->c->router->pathFor("home"));
-
-            //TODO : l'insertion de l'email peut produire une erreur car PrimaryKey
         }
 
         return $rs;
@@ -71,14 +78,18 @@ class User
             array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '') {
             $email = $rq->getParsedBody()['email'];
             $password = $rq->getParsedBody()['password'];
-            $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
-
-            if (password_verify($password, $password_hash[0])) {
-                $rs = $rs->withRedirect($this->c->router->pathFor("home"));
-                $_SESSION['user'] = array();
-                $_SESSION['user']['email'] = $email;
-                $_SESSION['user']['name'] = \mywishlist\model\User::query()->select("name")->where("email", "=", $email)->pluck("name")[0];
-            }else {
+            try {
+                $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
+                if (password_verify($password, $password_hash[0])) {
+                    $rs = $rs->withRedirect($this->c->router->pathFor("home"));
+                    $_SESSION['user'] = array();
+                    $_SESSION['user']['email'] = $email;
+                    $_SESSION['user']['name'] = \mywishlist\model\User::query()->select("name")->where("email", "=", $email)->pluck("name")[0];
+                }else {
+                    $this->c->flash->addMessage('badlogin', 'Vos informations de connexion sont erronées.');
+                    $rs = $rs->withRedirect($this->c->router->pathFor("pageLogin"));
+                }
+            } catch (QueryException $e) {
                 $this->c->flash->addMessage('badlogin', 'Vos informations de connexion sont erronées.');
                 $rs = $rs->withRedirect($this->c->router->pathFor("pageLogin"));
             }
@@ -180,6 +191,13 @@ class User
         return $rs;
     }
 
+    /**
+     * Deconnecte l'utilisateur
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function logout(Request $rq, Response $rs, array $args): Response
     {
         session_unset();
