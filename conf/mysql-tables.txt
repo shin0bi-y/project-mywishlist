@@ -46,6 +46,7 @@ create table item(
     photoPath VARCHAR(255),
     emailUser VARCHAR(255),
     cout int(11) NOT NULL,
+    messageRes VARCHAR(1024),
     FOREIGN KEY fk_idList (idList) references list(idList),
     FOREIGN KEY fk_emailUser (emailUser) references users(email)
 );
@@ -74,7 +75,6 @@ create table cagnotte (
     idItem int PRIMARY KEY,
     prix double,
     emailCreator VARCHAR(255),
-    date DATE,
     FOREIGN KEY fk_emailCreator (emailCreator) references users(email),
     FOREIGN KEY fk_idItemCagnotte (idItem) references item(idItem)
 );
@@ -82,7 +82,8 @@ create table cagnotte (
 /*------*/
 
 create table participantCagnotte(
-    idItem int PRIMARY KEY,
+    idParticipation int PRIMARY KEY AUTO_INCREMENT,
+    idItem int,
     emailParticipant VARCHAR(255),
     somme double,
     FOREIGN KEY fk_emailParticipant (emailParticipant) references users(email),

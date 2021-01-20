@@ -1,0 +1,29 @@
+<body>
+<?php if(isset($user)) : ?>
+    <?php if(sizeof(\mywishlist\model\Item::query()->select("idItem")->where('idItem', '=', $idItem)->pluck("idItem")) > 0): ?>
+    <h2 class="text-center my-5">Réserver un item</h2>
+        <?php if(\mywishlist\model\Item::query()->select("emailUser")->where('idItem', '=', $idItem)->pluck("emailUser")[0] === null): ?>
+        <form method="POST" action="<?= $router->pathFor('reservation', ['id'=> $id, 'idItem' => $idItem])?>">
+            <div class="form-group">
+                <label for="inputTitle">Avec quel email voulez-vous réserver cet item ?*</label>
+                <input type="text" name="email" class="form-control" id="inputConfirmation" value="<?= $user['email'] ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="textarea">Message</label>
+                <textarea class="form-control" id="textarea" rows="3" name="message"></textarea>
+            </div>
+            <br>
+            Les champs marqués d'un astérisque sont obligatoires.
+            <br>
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
+        <?php else: ?>
+            <h2 class="text-center my-5">Cet item est deja réservé</h2>
+        <?php endif; ?>
+    <?php else: ?>
+        <h2 class="text-center my-5">Cet item n'existe pas</h2>
+    <?php endif; ?>
+    <?php else : ?>
+        <h2 class="text-center my-5">Vous n'êtes pas connecté</h2>
+<?php endif; ?>
+</body>

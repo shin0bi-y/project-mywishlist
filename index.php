@@ -65,6 +65,12 @@ $app->post('/liste/{id}/item/{idItem}/image/delete[/]',\mywishlist\controller\It
 
 $app->get('/liste/{id}/item/{idItem}/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 
+$app->get('/liste/{id}/item/{idItem}/reservation[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'reservation.phtml', ['id'=> $args['id'], 'idItem'=>$args['idItem']]);
+})->setName("pageReservation");
+
+$app->post('/liste/{id}/item/{idItem}/reservation[/]', \mywishlist\controller\Item::class . ':addReservation')->setName("reservation");
+
 //--> Users
 
 $app->get('/register[/]', function (Request $request, Response $response, array $args) {
@@ -95,9 +101,14 @@ $app->get('/profile/logout[/]',\mywishlist\controller\User::class . ':logout')->
 
 //--> Cagnotte
 
-$app->get('/liste/{id}/item/{idItem}/cagnotte/', function (Request $request, Response $response, array $args) {
-    $this->view->render($response, 'cagnotte.phtml', ['idItem'=> $args['idItem'], 'id'=>$args['id']]);
-})->setName("showCagnotte");
+$app->get('/liste/{id}/item/{idItem}/cagnotte/', \mywishlist\controller\Cagnotte::class . ':showCagnotte')
+    ->setName("showCagnotte");
+
+$app->post('/liste/{id}/item/{idItem}/cagnotte/created',\mywishlist\controller\Cagnotte::class . ':createCagnotte')
+    ->setName("cagnotteCreate");
+
+$app->post('/liste/{id}/item/{idItem}/cagnotte/contributed',\mywishlist\controller\Cagnotte::class . ':participer')
+    ->setName("participerCagnotte");
 
 
 //--> Run

@@ -23,19 +23,16 @@
     <div class="container">
         <h1>Listes publiques</h1>
         <?php foreach ($publiques as $list) : ?>
-            <div class="row row-cols-3">
-                <div class="col">
-                    <?php echo "<a href=$rootUri/liste/$list->idList>" . $list->listName . '</a>' ?>
+            <?php if ($list->limitDate > date('Y-m-d H:i:s')): ?>
+                <div class="row row-cols-3">
+                    <div class="col">
+                        <?php echo "<a href=$rootUri/liste/$list->idList>" . $list->listName . '</a>' ?>
+                    </div>
+                    <div class="col">
+                        <?php echo 'Expiration :  ' . $list->limitDate; ?>
+                    </div>
                 </div>
-                <div class="col">
-                    <?php if ($list->limitDate < date('Y-m-d H:i:s')) {
-                        echo 'Expirée';
-                    } else {
-                        echo 'Expiration :  ' . $list->limitDate;
-                    }
-                    ?>
-                </div>
-            </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 <?php endif; ?>

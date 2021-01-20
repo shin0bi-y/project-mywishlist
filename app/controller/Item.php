@@ -40,14 +40,14 @@ class Item
         $itemName = $rq->getParsedBody()['name'];
         $description = $rq->getParsedBody()['desc'];
         $cout = $rq->getParsedBody()['prix'];
-        $emailUser = $_SESSION['user']['email'];
 
         $item->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
         $item->itemName = filter_var($itemName, FILTER_SANITIZE_STRING);
         $item->description = filter_var($description, FILTER_SANITIZE_STRING);
         $item->cout = filter_var($cout, FILTER_SANITIZE_NUMBER_FLOAT);
         $item->photoPath = null; //filter_var($photoPath, FILTER_SANITIZE_URL); On entre ca plus tard avec modifPhotoPath et un upload
-        $item->emailUser = filter_var($emailUser, FILTER_SANITIZE_EMAIL);
+        $item->emailUser = null;
+        $item->messageRes = "";
 
         $item->save();
 
@@ -233,10 +233,55 @@ class Item
         $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
         $emailUser = $_SESSION['user']['email'];
 
-        if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1)
+
+
+        if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1){
+            $participants = \mywishlist\model\Participant::where('idItem', '=', $idItem)->get();
+            if ($participants !== null){
+                foreach ($participants as $participant){
+                    $participant->delete();
+                }
+            }
+            $cagnotte = \mywishlist\model\Cagnotte::where('idItem', '=', $idItem)->first();
+            if ($cagnotte !== null)
+                $cagnotte->delete();
             $item->delete();
+        }
+
 
         $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
+        return $rs;
+    }
+
+    /**
+     * Methode de reservation d'un item avec l'email du reserveur
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
+    public function addReservation(Request $rq, Response $rs, array $args): Response
+    {
+        $id = $args['id'];
+        $idItem = $args['idItem'];
+        $email = $rq->getParsedBody()['email'];
+        $msg = $rq->getParsedBody()['message'];
+
+        \mywishlist\model\Item::where('idItem', '=', $idItem)->update([
+            'emailUser' => $email
+        ]);
+
+        if (strlen($msg) > 1024) {
+            $msg = substr($msg, 1023);
+        }
+
+        \mywishlist\model\Item::where('idItem', '=', $idItem)->update([
+            'messageRes' => $msg
+        ]);
+
+        $this->c->flash->addMessage('setreservation', 'Vous avez réservé cet item !');
+
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id'=> $id]));
         return $rs;
     }
 }

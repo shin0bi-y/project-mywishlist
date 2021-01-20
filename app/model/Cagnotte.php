@@ -13,4 +13,12 @@ class Cagnotte extends Model
     protected $table = 'cagnotte';
     protected $primaryKey = 'idItem';
 
+    /**
+     * Retourne les participants de la cagnotte
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function participants() {
+        return $this->hasMany('\mywishlist\model\Participant','idItem');
+    }
+
 }
