@@ -147,19 +147,4 @@ class Liste
         $msg->save();
         return $rs;
     }
-
-    public function getAdminListe(Request $rq, Response $rs, array $args): Response
-    {
-        $liste = \mywishlist\model\Liste::where(['idList' => $args['id']])->firstOrFail();
-        $this->loadCookiesFromRequest($rq);
-
-        $this->view->render($rs, 'adminliste.phtml', [
-            "liste" => $liste,
-            "items" => $liste->items()->get(),
-            "uri" => $rq->getUri()
-            //"flash" => $this->flash->getMessages(),
-            //"showRes" => $this->getShowRes()
-        ]);
-        return $rs;
-    }
 }
