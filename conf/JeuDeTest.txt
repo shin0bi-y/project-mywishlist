@@ -1,4 +1,12 @@
 Utilisateur : admin@admin.com / admin
-insert into users values('admin@admin.com','admin','$2y$10$z5uKr1nyz7Jq7bRFnz.MB.H4LGYQPhi6kqUUPXlgZ47eCq5sQabxa');
 
-insert into list values('8631086911','ListDemo','admin@admin.com',"Ceci est une liste de démo",'1','2021-01-20','2022-01-20');
+// 2 utilisateurs
+insert into users values('admin@admin.com','admin','$2y$10$z5uKr1nyz7Jq7bRFnz.MB.H4LGYQPhi6kqUUPXlgZ47eCq5sQabxa');
+insert into users values('anis@admin.com','anis','$2y$10$wQE0Vn1IJKVx6EHy..UgdePexG5TjrlTRc1o488RD9goJNA5Mqffm');
+
+// 2 listes, une demo et une liste personnelle
+insert into list values('8631086911','ListDemo','admin@admin.com','Ceci est une liste de démo','1','2021-01-20','2022-01-20');
+insert into list values('4903420775','liste2anis','anis@gmail.com','ma liste de beau gosse','1','2021-01-20','2022-01-22');
+
+// 2 items dans la 'liste2anis'
+insert into item values(7, 4903420775, FritesOmelette, 'Pour enseigner le PHP dans de bonnes conditions', NULL, NULL, 7);

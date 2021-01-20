@@ -12,7 +12,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 class Liste
 {
 
-    private \Slim\Container $c;
+    private $c;
 
     /**
      * Liste controller constructor.

@@ -2,7 +2,7 @@ RewriteEngine On
 
 # RewriteBase indispensable sur webetu :
 
-# RewriteBase /www/username0/mywishlist
+RewriteBase /www/raoult23u/project-mywishlist
 
 
 # Pour interdire l'accès aux répertoires contenant du code

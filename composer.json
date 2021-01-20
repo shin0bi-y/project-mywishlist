@@ -2,8 +2,8 @@
   "require" : {
     "slim/slim": "3.*",
     "slim/php-view": "2.*",
-    "illuminate/database": "^8.0",
-    "php": ">=7.4",
+    "illuminate/database": "<8.0",
+    "php": "7.0.33",
     "ext-pdo": "*",
     "slim/flash": "^0.4.0",
     "ext-openssl": "*"
