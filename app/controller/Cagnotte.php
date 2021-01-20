@@ -83,7 +83,6 @@ class Cagnotte
                 "isCagnotte" => true
             ]);
         }
-
         return $rs;
     }
 
@@ -104,8 +103,8 @@ class Cagnotte
         $participation->save();
 
         //On affiche la cagnotte une fois qu'elle a ete cree
-        $rs = $rs->withRedirect($this->c->router->pathFor("showAllList"));
-
+        
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $args['id']]));
         return $rs;
     }
 
