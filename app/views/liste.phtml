@@ -58,8 +58,9 @@
                                         L'item est réservé
                                     <?php endif; ?>
                                 <?php endif; ?>
-                                <a href="<?= $router->pathFor('showCagnotte', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>"
-                                   class="btn btn-primary">Cagnotte</a>
+                                <?php if ($item->user !== null): ?>
+                                    <a href="<?= $router->pathFor('showCagnotte', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>" class="btn btn-primary">Cagnotte</a>
+                                <?php endif; ?>
                                 <?php if ($_SESSION['user']['email'] == $liste->emailAuthor): ?>
                                     <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>"
                                        class="btn btn-warning">Modifier</a>
