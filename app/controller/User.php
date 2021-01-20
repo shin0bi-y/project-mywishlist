@@ -175,8 +175,13 @@ class User
                         \mywishlist\model\Item::where('emailUser', '=', $email)->delete();
                     }
                     \mywishlist\model\Participant::where('emailParticipant', '=', $email)->delete();
+                    \mywishlist\model\Cagnotte::where('emailCreator', '=', $email)->delete();
                     \mywishlist\model\Message::where('emailUser', '=', $email)->delete();
-                    \mywishlist\model\Liste::where('emailAuthor', '=', $email)->delete();
+                    try{
+                        \mywishlist\model\Liste::where('emailAuthor', '=', $email)->delete();
+                    }catch(Exception $e) {
+                        \mywishlist\model\Item::where('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailAuthor", '=', $email)->pluck('emailAuthor'))->delete();
+                    }
                     //si il est bon, on supprime le compte
                     \mywishlist\model\User::where('email', '=', $email)->delete();
                     session_unset();
