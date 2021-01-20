@@ -46,6 +46,7 @@ create table item(
     photoPath VARCHAR(255),
     emailUser VARCHAR(255),
     cout int(11) NOT NULL,
+    messageRes VARCHAR(1024),
     FOREIGN KEY fk_idList (idList) references list(idList),
     FOREIGN KEY fk_emailUser (emailUser) references users(email)
 );
