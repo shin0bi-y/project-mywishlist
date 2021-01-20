@@ -1,0 +1,4 @@
+Utilisateur : admin@admin.com / admin
+insert into users values('admin@admin.com','admin','$2y$10$z5uKr1nyz7Jq7bRFnz.MB.H4LGYQPhi6kqUUPXlgZ47eCq5sQabxa');
+
+insert into list values('8631086911','ListDemo','admin@admin.com',"Ceci est une liste de démo",'1','2021-01-20','2022-01-20');
