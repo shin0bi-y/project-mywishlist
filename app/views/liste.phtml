@@ -21,8 +21,12 @@
             <?php else : ?>
                 <p> Liste privée</p>
             <?php endif; ?>
-            <a data-toggle="modal" href="#addItem" class="btn btn-primary">Ajouter un item</a>
-            <a data-toggle="modal" href="#addMessage" class="btn btn-primary">Laisser un message</a>
+            <?php if (isset($_SESSION['user'])): ?>
+                <?php if ($_SESSION['user']['email'] == $liste->emailAuthor): ?>
+                <a data-toggle="modal" href="#addItem" class="btn btn-primary">Ajouter un item</a>
+                <?php endif;?>
+                <a data-toggle="modal" href="#addMessage" class="btn btn-primary">Laisser un message</a>
+            <?php endif;?>
         </div>
         <div class="card-footer text-muted">
             Crée le <?= $liste->creationDate ?> - Expire le <?= $liste->limitDate ?>
@@ -49,12 +53,11 @@
                                     <?php endif; ?>
                                 <?php else: ?>
                                     <?php if ($liste->limitDate < date('Y-m-d H:i:s')) : ?>
-                                        <?php echo 'Réservé par : ' . \mywishlist\model\User::where('email', '=', $item->emailUser)->first()->name; ?>
+                                        <?='Réservé par : ' . \mywishlist\model\User::where('email', '=', $item->emailUser)->first()->name; ?>
                                     <?php else: ?>
                                         L'item est réservé
                                     <?php endif; ?>
                                 <?php endif; ?>
-                                <br><br>
                                 <a href="<?= $router->pathFor('showCagnotte', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>"
                                    class="btn btn-primary">Cagnotte</a>
                                 <?php if ($_SESSION['user']['email'] == $liste->emailAuthor): ?>
