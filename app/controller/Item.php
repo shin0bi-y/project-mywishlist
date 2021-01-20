@@ -10,9 +10,9 @@ use Slim\Http\Response;
 class Item
 {
 
-    private \Slim\Container $c;
-    private int $countImage;
-    private string $target_dir = "uploads/";
+    private $c;
+    private $countImage;
+    private $target_dir = "uploads/";
 
     /**
      * Item controller constructor.

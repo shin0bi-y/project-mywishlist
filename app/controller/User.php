@@ -12,7 +12,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 class User
 {
 
-    private \Slim\Container $c;
+    private $c;
 
     /**
      * Constructeur de User
@@ -53,8 +53,9 @@ class User
                 $this->c->flash->addMessage('goodregister', 'Votre compte a été créé. Vous pouvez vous connecter à l\'aide du bouton "Connexion".');
                 $rs = $rs->withRedirect($this->c->router->pathFor("home"));
             } catch (QueryException $e) {
+		echo $e;
                 $this->c->flash->addMessage('mailexistant', 'Inscription impossible, l\'email utilisé est déjà utilisé');
-                $rs = $rs->withRedirect($this->c->router->pathFor("home"));
+                //$rs = $rs->withRedirect($this->c->router->pathFor("home"));
             }
         } else {
             $this->c->flash->addMessage('mailnonconforme', 'Inscription impossible (mail non conforme)');
