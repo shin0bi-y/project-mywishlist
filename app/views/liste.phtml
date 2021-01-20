@@ -47,6 +47,10 @@
                                     <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-warning">Modifier</a>
                                     <a href="<?= $router->pathFor('deleteItem', ['id'=>$liste->idList,'idItem' => $item->idItem])?>" class="btn btn-danger">Supprimer</a>
                                 <?php endif; ?>
+                                <?php if($item->emailUser !== null):?>
+                                    <p class="card-text" style="text-decoration: underline">Message de réservation : </p>
+                                    <label><?= \mywishlist\model\Item::query()->select("messageRes")->where('idItem', '=', $item->idItem)->pluck("messageRes")[0] ?></label>
+                                <?php endif; ?>
 
                             <?php endif; ?>
                         </div>

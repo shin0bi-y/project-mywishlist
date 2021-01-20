@@ -47,6 +47,7 @@ class Item
         $item->cout = filter_var($cout, FILTER_SANITIZE_NUMBER_FLOAT);
         $item->photoPath = null; //filter_var($photoPath, FILTER_SANITIZE_URL); On entre ca plus tard avec modifPhotoPath et un upload
         $item->emailUser = null;
+        $item->messageRes = "";
 
         $item->save();
 
@@ -256,10 +257,19 @@ class Item
     {
         $id = $args['id'];
         $idItem = $args['idItem'];
-        $email = $_SESSION['user']['email'];
+        $email = $rq->getParsedBody()['email'];
+        $msg = $rq->getParsedBody()['message'];
 
         \mywishlist\model\Item::where('idItem', '=', $idItem)->update([
             'emailUser' => $email
+        ]);
+
+        if (strlen($msg) > 1024) {
+            $msg = substr($msg, 1023);
+        }
+
+        \mywishlist\model\Item::where('idItem', '=', $idItem)->update([
+            'messageRes' => $msg
         ]);
 
         $this->c->flash->addMessage('setreservation', 'Vous avez réservé cet item !');
