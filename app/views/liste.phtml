@@ -8,7 +8,7 @@
         </div>
     <?php endforeach; ?>
 <?php endif; ?>
-<?php if ($liste->limitDate > date('Y-m-d H:i:s')): ?>
+<?php if ($liste->limitDate > date('Y-m-d H:i:s') || $liste->emailAuthor == $_SESSION['user']['email']): ?>
     <div class="card text-center">
         <div class="card-header">
             Votre liste
