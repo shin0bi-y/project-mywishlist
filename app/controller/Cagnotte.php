@@ -38,13 +38,22 @@ class Cagnotte
 
     public function showCagnotte(Request $rq, Response $rs, array $args): Response
     {
-        $cagnotte = \mywishlist\model\Cagnotte::query()->where('idItem', '=', $args["idItem"]);
+        $cagnotte = \mywishlist\model\Cagnotte::query()->select("idItem")->where("idItem", "=", $args["idItem"])->pluck("idItem")[0];
+        $item = \mywishlist\model\Item::query()->where('idItem', '=', $args["idItem"])->get();
 
         if ($cagnotte === null){
-            echo 'nada';
+            $this->c->view->render($rs, 'cagnotte.phtml', [
+                "item" => $item,
+                "isCagnotte" => false
+            ]);
         } else {
-            echo "nada2";
+            $this->c->view->render($rs, 'cagnotte.phtml', [
+                "item" => $item,
+                "isCagnotte" => true
+            ]);
         }
+
+
 
         return $rs;
     }

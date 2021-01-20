@@ -95,10 +95,11 @@ $app->get('/profile/logout[/]',\mywishlist\controller\User::class . ':logout')->
 
 //--> Cagnotte
 
-$app->get('/liste/{id}/item/{idItem}/cagnotte/', function (Request $request, Response $response, array $args) {
-    $this->view->render($response, 'cagnotte.phtml', ['idItem'=> $args['idItem'], 'id'=>$args['id']]);
-})->setName("showCagnotte");
+$app->get('/liste/{id}/item/{idItem}/cagnotte/', \mywishlist\controller\Cagnotte::class . ':showCagnotte')
+    ->setName("showCagnotte");
 
+$app->post('/liste/{id}/item/{idItem}/cagnotte/created',\mywishlist\controller\Cagnotte::class . ':createCagnotte')
+    ->setName("cagnotteCreate");
 
 //--> Run
 
