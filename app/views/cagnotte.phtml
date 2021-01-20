@@ -14,43 +14,48 @@
         <p><img src="<?= $rootUri . "/" . urldecode($photoPath) ?>" width="150px" height="150px"></p>
     <?php endif; ?>
 
-    <h3>Prix : <?= $prix ?></h3>
+    <h3>Prix : <?= $prix ?> $</h3>
 
     <?php $sum = 0; ?>
 
+    <br><br><br>
+    <p>Liste des participations :</p>
     <?php foreach($participants as $participant): ?>
         <p><?= $participant->emailParticipant ?> : <?= $participant->somme ?> $</p>
         <?php $sum += $participant->somme; ?>
     <?php endforeach; ?>
 
-    <h1>Reste à payer : <?= $prix-$sum; ?></h1>
+    <?php if($prix-$sum > 0): ?>
+        <h1>Reste à payer : <?= $prix-$sum; ?> $</h1>
+        <a data-toggle="modal" href="#participate" class="btn btn-primary">Participer</a>
 
-    <a data-toggle="modal" href="#participate" class="btn btn-primary">Participer</a>
-
-    <div class="modal fade" id="participate" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Participer à la cagnotte</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" action="<?= $router->pathFor('participerCagnotte', ['id'=> $id, 'idItem' => $idItem]) ?>">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="inputPrice">Somme à verser</label>
-                            <input type="number" step="0.01" min="0" class="form-control" id="inputPrice" name="somme" value="" required>
+        <div class="modal fade" id="participate" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Participer à la cagnotte</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="<?= $router->pathFor('participerCagnotte', ['id'=> $id, 'idItem' => $idItem]) ?>">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="inputPrice">Somme à verser</label>
+                                <input type="number" max="<?= $prix-$sum ?>" step="0.01" min="0" class="form-control" id="inputPrice" name="somme" value="" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Participer</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Participer</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    <?php else: ?>
+        <h1>Prix de l'item atteint !</h1>
+    <?php endif; ?>
 <?php endif; ?>
 
 </body>
