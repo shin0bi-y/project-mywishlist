@@ -182,6 +182,11 @@ class User
                         \mywishlist\model\Item::where('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailAuthor", '=', $email)
                             ->pluck('emailAuthor'))->delete();
                     }
+                    if(sizeof(\mywishlist\model\Message::query()->select('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailUser", '=', $email)
+                            ->pluck('emailUser'))) > 0){
+                        \mywishlist\model\Message::where('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailUser", '=', $email)
+                            ->pluck('emailUser'))->delete();
+                    }
                     \mywishlist\model\Liste::where('emailAuthor', '=', $email)->delete();
                     //si il est bon, on supprime le compte
                     \mywishlist\model\User::where('email', '=', $email)->delete();
