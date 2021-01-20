@@ -171,6 +171,8 @@ class User
             //on verifie son password
             if ($password_hash[0] != '') {
                 if (password_verify($password, $password_hash[0])) {
+                    \mywishlist\model\Message::where('emailUser', '=', $email)->delete();
+                    \mywishlist\model\Liste::where('emailAuthor', '=', $email)->delete();
                     //si il est bon, on supprime le compte
                     \mywishlist\model\User::where('email', '=', $email)->delete();
                     session_unset();
@@ -186,8 +188,6 @@ class User
             //si il n'existe pas
             $rs->getBody()->write("<h1>Compte inexistant</h1>");
         }
-
-        //TODO : Trigger qui supprimer les listes crees par le user + redirection
 
         return $rs;
     }
