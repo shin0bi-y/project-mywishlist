@@ -177,7 +177,42 @@ class User
                     \mywishlist\model\Participant::where('emailParticipant', '=', $email)->delete();
                     \mywishlist\model\Cagnotte::where('emailCreator', '=', $email)->delete();
                     \mywishlist\model\Message::where('emailUser', '=', $email)->delete();
-                    \mywishlist\model\Item::where('idList','=',\mywishlist\model\Liste::where('emailAuthor','=',$email)->first())->delete();
+
+
+                    $item = \mywishlist\model\Item::where('idList', '=', \mywishlist\model\Liste::where('emailAuthor','=',$email)->first());
+                    if (!$item->photoPath == null){
+                        $target_file = $item->photoPath;
+
+                        //On recupere seulement le path
+                        $target_file = str_replace('"', "", $target_file);
+                        $target_file = str_replace('[', "", $target_file);
+                        $target_file = str_replace(']', "", $target_file);
+                        $target_file = urldecode($target_file);
+
+                        unlink($target_file);
+                    }
+
+                    $id = filter_var($args['id'],FILTER_SANITIZE_NUMBER_INT);
+                    $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
+                    $emailUser = $_SESSION['user']['email'];
+
+
+
+                    if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1){
+                        $participants = \mywishlist\model\Participant::where('idItem', '=', $idItem)->get();
+                        if ($participants !== null){
+                            foreach ($participants as $participant){
+                                $participant->delete();
+                            }
+                        }
+                        $cagnotte = \mywishlist\model\Cagnotte::where('idItem', '=', $idItem)->first();
+                        if ($cagnotte !== null)
+                            $cagnotte->delete();
+                        $item->delete();
+                    }
+
+
+
                     if(sizeof(\mywishlist\model\Message::query()->select('idList')->where("idList", "=", \mywishlist\model\Liste::query()->select('idList')
                             ->where("emailAuthor", '=', $email)->first('idList'))->pluck('idList')) > 0){
                         \mywishlist\model\Message::where('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailAuthor", '=', $email)
