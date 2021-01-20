@@ -31,7 +31,13 @@ class Cagnotte
         $cagnotte->emailCreator = $args['emailCreator'];
         $cagnotte->save();
 
-        $rs = $rs->withRedirect($this->c->router->pathFor("showAllList"));
+        //On affiche la cagnotte une fois qu'elle a ete cree
+        $this->c->view->render($rs, 'cagnotte.phtml', [
+            "idItem" => $args["idItem"],
+            "id" => $args["id"],
+            "isCagnotte" => true
+        ]);
+
         return $rs;
     }
 
@@ -40,6 +46,7 @@ class Cagnotte
         $cagnotte = \mywishlist\model\Cagnotte::query()->select("idItem")->where("idItem", "=", $args["idItem"])->pluck("idItem")[0];
         $prix = \mywishlist\model\Item::query()->select("cout")->where('idItem', '=', $args["idItem"])->pluck("cout")[0];
 
+        //On verifie ici si la cagnotte existe ou pas
         if ($cagnotte === null){
             $this->c->view->render($rs, 'cagnotte.phtml', [
                 "idItem" => $args["idItem"],
