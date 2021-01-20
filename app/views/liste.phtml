@@ -1,15 +1,25 @@
-<?php if ($liste->limitDate > date('Y-m-d H:i:s')): ?>
+<?php if (isset($flash->getMessages()['setreservation'])) : ?>
+    <?php foreach ($flash->getMessages()['setreservation'] as $m): ?>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong> <?= $m ?></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+<?php if ($liste->limitDate > date('Y-m-d H:i:s') || $liste->emailAuthor == $_SESSION['user']['email']): ?>
     <div class="card text-center">
         <div class="card-header">
             Votre liste
         </div>
         <div class="card-body">
             <h5 class="card-title"> <?= $liste->listName ?> </h5>
-            <p class="card-text"> <?= $liste->description?> </p>
-            <?php if($liste->isPublic==1): ?>
-            <p> Liste publique </p>
+            <p class="card-text"> <?= $liste->description ?> </p>
+            <?php if ($liste->isPublic == 1): ?>
+                <p> Liste publique </p>
             <?php else : ?>
-            <p> Liste privée</p>
+                <p> Liste privée</p>
             <?php endif; ?>
             <a data-toggle="modal" href="#addItem" class="btn btn-primary">Ajouter un item</a>
         </div>
@@ -17,30 +27,51 @@
             Crée le <?= $liste->creationDate ?> - Expire le <?= $liste->limitDate ?>
         </div>
         <div class="row">
-            <?php foreach($items as $item) :?>
+            <?php foreach ($items as $item) : ?>
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><?= $item->itemName ?></h5>
                             <p class="card-text"><?= $item->description ?></p>
-                            <?php if($item->photoPath !== null): ?>
-                            <p><img src="<?= $rootUri . "/" . urldecode($item->photoPath) ?>" width="100px" height="100px"></p>
+                            <?php if ($item->photoPath !== null): ?>
+                                <p><img src="<?= $rootUri . "/" . urldecode($item->photoPath) ?>" width="100px"
+                                        height="100px"></p>
                             <?php endif; ?>
                             <p class="card-text"><?= $item->cout ?> $</p>
-                            <?php if(isset($_SESSION['user'])):?>
-                                <a href="#" class="btn btn-success">Réserver</a> <!-- href de reservation d'item à mettre -->
-                                <a href="<?= $router->pathFor('showCagnotte', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-info">Cagnotte</a>
+                            <?php if (isset($_SESSION['user'])): ?>
+                                <?php if ($item->emailUser === null): ?>
+                                    <?php if ($liste->limitDate < date('Y-m-d H:i:s')) : ?>
+                                        L'item n'a pas été réservé
+                                    <?php else: ?>
+                                        <a href="<?= $router->pathFor('pageReservation', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>"
+                                           class="btn btn-primary">Réserver</a>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <?php if ($liste->limitDate < date('Y-m-d H:i:s')) : ?>
+                                        <?php echo 'Réservé par : ' . \mywishlist\model\User::where('email', '=', $item->emailUser)->first()->name; ?>
+                                    <?php else: ?>
+                                        L'item est réservé
+                                    <?php endif; ?>
+                                <?php endif; ?>
                                 <br><br>
-                                <?php if($_SESSION['user']['email'] == $liste->emailAuthor): ?>
-                                    <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-warning">Modifier</a>
-                                    <a href="<?= $router->pathFor('deleteItem', ['id'=>$liste->idList,'idItem' => $item->idItem])?>" class="btn btn-danger">Supprimer</a>
+                                <a href="<?= $router->pathFor('showCagnotte', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>"
+                                   class="btn btn-primary">Cagnotte</a>
+                                <?php if ($_SESSION['user']['email'] == $liste->emailAuthor): ?>
+                                    <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>"
+                                       class="btn btn-warning">Modifier</a>
+                                    <a href="<?= $router->pathFor('deleteItem', ['id' => $liste->idList, 'idItem' => $item->idItem]) ?>"
+                                       class="btn btn-danger">Supprimer</a>
+                                <?php endif; ?>
+                                <?php if($item->emailUser !== null):?>
+                                    <p class="card-text" style="text-decoration: underline">Message de réservation : </p>
+                                    <label><?= \mywishlist\model\Item::query()->select("messageRes")->where('idItem', '=', $item->idItem)->pluck("messageRes")[0] ?></label>
                                 <?php endif; ?>
 
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </div>
     </div>
 <?php else: ?>
@@ -59,7 +90,8 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputName">Nom*</label>
-                        <input type="text" name="name" class="form-control" id="inputName" placeholder="Nom de l'objet" value="" required>
+                        <input type="text" name="name" class="form-control" id="inputName" placeholder="Nom de l'objet"
+                               value="" required>
                     </div>
                     <div class="form-group">
                         <label for="inputDesc">Description</label>
@@ -71,7 +103,8 @@
                     </div>
                     <div class="form-group">
                         <label for="inputPrice">Prix*</label>
-                        <input type="number" step="0.01" min="0" class="form-control" id="inputPrice" name="prix" value="" required>
+                        <input type="number" step="0.01" min="0" class="form-control" id="inputPrice" name="prix"
+                               value="" required>
                     </div>
                     Les champs marqués d'un astérisque sont obligatoires.
                 </div>

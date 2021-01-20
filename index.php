@@ -65,6 +65,12 @@ $app->post('/liste/{id}/item/{idItem}/image/delete[/]',\mywishlist\controller\It
 
 $app->get('/liste/{id}/item/{idItem}/delete[/]',\mywishlist\controller\Item::class . ':deleteItem')->setName("deleteItem");
 
+$app->get('/liste/{id}/item/{idItem}/reservation[/]', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'reservation.phtml', ['id'=> $args['id'], 'idItem'=>$args['idItem']]);
+})->setName("pageReservation");
+
+$app->post('/liste/{id}/item/{idItem}/reservation[/]', \mywishlist\controller\Item::class . ':addReservation')->setName("reservation");
+
 //--> Users
 
 $app->get('/register[/]', function (Request $request, Response $response, array $args) {
