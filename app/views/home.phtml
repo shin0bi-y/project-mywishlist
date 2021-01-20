@@ -9,6 +9,16 @@
         </div>
     <?php endforeach; ?>
 <?php endif; ?>
+<?php if (isset($flash->getMessages()['mailnonconforme'])) : ?>
+    <?php foreach ($flash->getMessages()['mailnonconforme'] as $m): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong> <?= $m ?></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 <?php if (isset($flash->getMessages()['modifysuccess'])) : ?>
     <?php foreach ($flash->getMessages()['modifysuccess'] as $m): ?>
         <div class="alert alert-info alert-dismissible fade show" role="alert">

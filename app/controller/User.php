@@ -56,6 +56,9 @@ class User
                 $this->c->flash->addMessage('mailexistant', 'Inscription impossible, l\'email utilisé est déjà utilisé');
                 $rs = $rs->withRedirect($this->c->router->pathFor("home"));
             }
+        } else {
+            $this->c->flash->addMessage('mailnonconforme', 'Inscription impossible (mail non conforme)');
+            $rs = $rs->withRedirect($this->c->router->pathFor("home"));
         }
 
         return $rs;
@@ -75,14 +78,18 @@ class User
             array_key_exists('password', $rq->getParsedBody()) && $rq->getParsedBody()["password"] !== '') {
             $email = $rq->getParsedBody()['email'];
             $password = $rq->getParsedBody()['password'];
-            $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
-
-            if (password_verify($password, $password_hash[0])) {
-                $rs = $rs->withRedirect($this->c->router->pathFor("home"));
-                $_SESSION['user'] = array();
-                $_SESSION['user']['email'] = $email;
-                $_SESSION['user']['name'] = \mywishlist\model\User::query()->select("name")->where("email", "=", $email)->pluck("name")[0];
-            }else {
+            try {
+                $password_hash = \mywishlist\model\User::query()->select("password")->where("email", "=", $email)->pluck("password");
+                if (password_verify($password, $password_hash[0])) {
+                    $rs = $rs->withRedirect($this->c->router->pathFor("home"));
+                    $_SESSION['user'] = array();
+                    $_SESSION['user']['email'] = $email;
+                    $_SESSION['user']['name'] = \mywishlist\model\User::query()->select("name")->where("email", "=", $email)->pluck("name")[0];
+                }else {
+                    $this->c->flash->addMessage('badlogin', 'Vos informations de connexion sont erronées.');
+                    $rs = $rs->withRedirect($this->c->router->pathFor("pageLogin"));
+                }
+            } catch (QueryException $e) {
                 $this->c->flash->addMessage('badlogin', 'Vos informations de connexion sont erronées.');
                 $rs = $rs->withRedirect($this->c->router->pathFor("pageLogin"));
             }
@@ -184,6 +191,13 @@ class User
         return $rs;
     }
 
+    /**
+     * Deconnecte l'utilisateur
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     */
     public function logout(Request $rq, Response $rs, array $args): Response
     {
         session_unset();
