@@ -7,8 +7,8 @@
         </div>
     </form>
 <?php else: ?>
-    <?php $sum = 0; ?>
 
+    <?php $sum = 0; ?>
     <div class="card text-center">
         <div class="card-header">
             Cagnotte
@@ -19,12 +19,7 @@
                 <img src="<?= $rootUri . "/" . urldecode($photoPath) ?>" width="150px" height="150px">
             <?php endif; ?>
             <h3>Prix : <?= $prix ?> $</h3>
-            <?php if($prix-$sum > 0): ?>
-                <h3>Reste à payer : <?= $prix-$sum; ?> $</h3>
-            <a data-toggle="modal" href="#participate" class="btn btn-primary">Participer</a><br><br>
-            <?php else: ?>
-                <h1>Prix de l'item atteint !</h1>
-            <?php endif; ?>
+            <br></br>
             <table class="table">
                 <thead>
                 <tr>
@@ -40,6 +35,14 @@
                 <?php endforeach;?>
                 </tbody>
             </table>
+            <br></br>
+            <?php if($prix-$sum > 0): ?>
+                <h3>Reste à payer : <?= $prix-$sum; ?> $</h3>
+                <br></br>
+                <a data-toggle="modal" href="#participate" class="btn btn-primary">Participer</a><br><br>
+            <?php else: ?>
+                <h1>Prix de l'item atteint !</h1>
+            <?php endif; ?>
         </div>
         <div class="card-footer text-muted">
 
@@ -71,4 +74,7 @@
                 </div>
             </div>
         </div>
+
+
+
 <?php endif; ?>
