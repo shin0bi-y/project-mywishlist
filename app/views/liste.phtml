@@ -24,7 +24,7 @@
                             <h5 class="card-title"><?= $item->itemName ?></h5>
                             <p class="card-text"><?= $item->description ?></p>
                             <?php if($item->photoPath !== null): ?>
-                            <p><img src="<?= "/" . $item->photoPath ?>" width="100px" height="100px"></p>
+                            <p><img src="<?= "/" . urldecode($item->photoPath) ?>" width="100px" height="100px"></p>
                             <?php endif; ?>
                             <p class="card-text"><?= $item->cout ?> $</p>
                             <?php if(isset($_SESSION['user'])):?>

@@ -143,7 +143,7 @@ class Item
             if(!move_uploaded_file($_FILES["submit"]["tmp_name"], $this->target_dir . $target_file)) {
                 $this->c->flash->addMessage('badregister', "L'upload a echoue...");
             }
-            
+
             //On supprime l'ancienne image
             $old = \mywishlist\model\Item::query()->select("photoPath")->where('idItem', '=', $idItem)
                 ->pluck("photoPath");

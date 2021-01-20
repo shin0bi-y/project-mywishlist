@@ -93,6 +93,13 @@ $app->post('/profile/delete[/]', \mywishlist\controller\User::class . ':deletePr
 
 $app->get('/profile/logout[/]',\mywishlist\controller\User::class . ':logout')->setName("logout");
 
+//--> Cagnotte
+
+$app->get('/liste/{id}/item/{idItem}/cagnotte/', function (Request $request, Response $response, array $args) {
+    $this->view->render($response, 'cagnotte.phtml', ['idItem'=> $args['idItem'], 'id'=>$args['id']]);
+})->setName("showCagnotte");
+
+
 //--> Run
 
 $app->run();

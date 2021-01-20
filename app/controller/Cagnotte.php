@@ -24,9 +24,28 @@ class Cagnotte
 
     public function createCagnotte(Request $rq, Response $rs, array $args): Response
     {
+        $cagnotte = new \mywishlist\model\Cagnotte();
 
+        $cagnotte->idItem = $args['idItem'];
+        $cagnotte->prix = $args['prix'];
+        $cagnotte->emailCreator = $args['emailCreator'];
+        $cagnotte->date = time();
+        $cagnotte->save();
 
-        $rs = $rs->withRedirect($this->c->router->pathFor("home"));
+        $rs = $rs->withRedirect($this->c->router->pathFor("showAllList"));
+        return $rs;
+    }
+
+    public function showCagnotte(Request $rq, Response $rs, array $args): Response
+    {
+        $cagnotte = \mywishlist\model\Cagnotte::query()->where('idItem', '=', $args["idItem"]);
+
+        if ($cagnotte === null){
+            echo 'nada';
+        } else {
+            echo "nada2";
+        }
+
         return $rs;
     }
 
