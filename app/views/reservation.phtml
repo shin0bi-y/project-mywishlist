@@ -1,0 +1,18 @@
+<body>
+<?php if(sizeof(\mywishlist\model\Item::query()->select("idItem")->where('idItem', '=', $idItem)->pluck("idItem")) > 0): ?>
+<h2 class="text-center my-5">Réserver un item</h2>
+    <?php if(\mywishlist\model\Item::query()->select("emailUser")->where('idItem', '=', $idItem)->pluck("emailUser")[0] === null): ?>
+    <form method="POST" action="<?= $router->pathFor('reservation', ['id'=> $id, 'idItem' => $idItem])?>">
+        <div class="form-group">
+            <label for="inputTitle">Voulez-vous réserver cet item ?</label>
+            <button type="submit" class="btn btn-primary">Oui</button>
+            <a href="<?= $router->pathFor('home')?>" class="btn btn-danger">Non</a>
+        </div>
+    </form>
+    <?php else: ?>
+        <h2 class="text-center my-5">Cet item est deja réservé</h2>
+    <?php endif; ?>
+<?php else: ?>
+    <h2 class="text-center my-5">Cet item n'existe pas</h2>
+<?php endif; ?>
+</body>

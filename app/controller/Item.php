@@ -40,14 +40,13 @@ class Item
         $itemName = $rq->getParsedBody()['name'];
         $description = $rq->getParsedBody()['desc'];
         $cout = $rq->getParsedBody()['prix'];
-        $emailUser = $_SESSION['user']['email'];
 
         $item->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
         $item->itemName = filter_var($itemName, FILTER_SANITIZE_STRING);
         $item->description = filter_var($description, FILTER_SANITIZE_STRING);
         $item->cout = filter_var($cout, FILTER_SANITIZE_NUMBER_FLOAT);
         $item->photoPath = null; //filter_var($photoPath, FILTER_SANITIZE_URL); On entre ca plus tard avec modifPhotoPath et un upload
-        $item->emailUser = filter_var($emailUser, FILTER_SANITIZE_EMAIL);
+        $item->emailUser = null;
 
         $item->save();
 
@@ -243,6 +242,22 @@ class Item
 
 
         $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
+        return $rs;
+    }
+
+    public function addReservation(Request $rq, Response $rs, array $args): Response
+    {
+        $id = $args['id'];
+        $idItem = $args['idItem'];
+        $email = $_SESSION['user']['email'];
+
+        \mywishlist\model\Item::where('idItem', '=', $idItem)->update([
+            'emailUser' => $email
+        ]);
+
+        $this->c->flash->addMessage('setreservation', 'Vous avez réservé cet item !');
+
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id'=> $id]));
         return $rs;
     }
 }
