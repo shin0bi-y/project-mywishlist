@@ -177,15 +177,15 @@ class User
                     \mywishlist\model\Participant::where('emailParticipant', '=', $email)->delete();
                     \mywishlist\model\Cagnotte::where('emailCreator', '=', $email)->delete();
                     \mywishlist\model\Message::where('emailUser', '=', $email)->delete();
-                    if(sizeof(\mywishlist\model\Item::query()->select('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailAuthor", '=', $email)
-                        ->pluck('emailAuthor'))) > 0){
+                    if(sizeof(\mywishlist\model\Item::query()->select('idList', '=', \mywishlist\model\Liste::query()->select('idList')
+                            ->where("emailAuthor", '=', $email)->first('idList'))->pluck('idList')) > 0){
                         \mywishlist\model\Item::where('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailAuthor", '=', $email)
-                            ->pluck('emailAuthor'))->delete();
+                            ->first('emailAuthor'))->delete();
                     }
-                    if(sizeof(\mywishlist\model\Message::query()->select('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailAuthor", '=', $email)
-                            ->pluck('emailUser'))) > 0){
+                    if(sizeof(\mywishlist\model\Message::query()->select('idList', '=', \mywishlist\model\Liste::query()->select('idList')
+                            ->where("emailAuthor", '=', $email)->first('idList'))->pluck('idList')) > 0){
                         \mywishlist\model\Message::where('idList', '=', \mywishlist\model\Liste::query()->select('idList')->where("emailAuthor", '=', $email)
-                            ->pluck('emailAuthor'))->delete();
+                            ->first('idList'))->delete();
                     }
                     \mywishlist\model\Liste::where('emailAuthor', '=', $email)->delete();
                     //si il est bon, on supprime le compte
