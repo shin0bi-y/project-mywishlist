@@ -24,15 +24,15 @@
                             <h5 class="card-title"><?= $item->itemName ?></h5>
                             <p class="card-text"><?= $item->description ?></p>
                             <?php if($item->photoPath !== null): ?>
-                            <p><img src="<?= "/" . urldecode($item->photoPath) ?>" width="100px" height="100px"></p>
+                            <p><img src="<?= $rootUri . "/" . urldecode($item->photoPath) ?>" width="100px" height="100px"></p>
                             <?php endif; ?>
                             <p class="card-text"><?= $item->cout ?> $</p>
                             <?php if(isset($_SESSION['user'])):?>
-                                <a href="#" class="btn btn-primary">Réserver</a> <!-- href de reservation d'item à mettre -->
-                                <a href="<?= $router->pathFor('showCagnotte', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-primary">Cagnotte</a>
+                                <a href="#" class="btn btn-success">Réserver</a> <!-- href de reservation d'item à mettre -->
+                                <a href="<?= $router->pathFor('showCagnotte', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-info">Cagnotte</a>
                                 <br><br>
                                 <?php if($_SESSION['user']['email'] == $liste->emailAuthor): ?>
-                                    <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-primary">Modifier</a>
+                                    <a href="<?= $router->pathFor('pageModifItem', ['id' => $liste->idList, 'idItem'=> $item->idItem]) ?>" class="btn btn-warning">Modifier</a>
                                     <a href="<?= $router->pathFor('deleteItem', ['id'=>$liste->idList,'idItem' => $item->idItem])?>" class="btn btn-danger">Supprimer</a>
                                 <?php endif; ?>
 
