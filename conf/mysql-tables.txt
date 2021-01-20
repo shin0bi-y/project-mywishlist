@@ -6,6 +6,8 @@ show tables;
 drop table users;
 drop table list;
 drop table item;
+drop table cagnotte;
+drop table participantCagnotte;
 
 /*------*/
 
@@ -14,10 +16,6 @@ create table users(
     name VARCHAR(255),
     password VARCHAR(255)
 );
-
-insert into users (email, name, password) values ('jean@hotmail.com', 'Jean', '123456');
-
-select * from users;
 
 /*------*/
 
@@ -31,10 +29,6 @@ create table list(
     limitDate DATE,
     FOREIGN KEY fk_emailAuthor (emailAuthor) references users(email)
 );
-
-delete from list;
-insert into list (listName, emailAuthor, description, creationDate, limitDate) values ('pour yanis', 'jean@hotmail.com', 'cool', now(), now());
-select * from list;
 
 /*------*/
 
@@ -51,10 +45,6 @@ create table item(
     FOREIGN KEY fk_emailUser (emailUser) references users(email)
 );
 
-insert into item (idList, itemName, description, photoPath, emailUser) values (1, 'ThinkPad', 'Best Laptop', '/images/thinkpad.jpg', 'jean@hotmail.com');
-
-select * from item;
-
 /*------*/
 
 create table message (
@@ -67,7 +57,6 @@ create table message (
     FOREIGN KEY fk_emailUserMessage (emailUser) references users(email),
     FOREIGN KEY fk_idListMessage (idList) references list(idList)
 );
-
 
 /*------*/
 
