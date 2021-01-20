@@ -55,7 +55,7 @@ class Cagnotte
      */
     public function showCagnotte(Request $rq, Response $rs, array $args): Response
     {
-        $cagnotte = \mywishlist\model\Cagnotte::query()->select("idItem")->where("idItem", "=", $args["idItem"])->pluck("idItem")[0];
+        $cagnotte = \mywishlist\model\Cagnotte::query()->select("idItem")->where("idItem", "=", $args["idItem"])->first();
         $prix = \mywishlist\model\Item::query()->select("cout")->where('idItem', '=', $args["idItem"])->pluck("cout")[0];
         $itemName = \mywishlist\model\Item::query()->select("itemName")->where('idItem', '=', $args["idItem"])->pluck("itemName")[0];
         $photoPath = \mywishlist\model\Item::query()->select("photoPath")->where('idItem', '=', $args["idItem"])->pluck("photoPath")[0];
