@@ -1,5 +1,5 @@
 <body>
-<h2 class="text-center my-5">Cagnotte</h2>
+<h2 class="text-center my-5">Cagnotte de <?= $itemName ?></h2>
 
 <?php if(!$isCagnotte): ?>
     <form method="POST" action="<?= $router->pathFor('cagnotteCreate', ['id'=> $id, 'idItem' => $idItem])?>">
@@ -9,8 +9,48 @@
         </div>
     </form>
 <?php else: ?>
-    <p>EN COURS...</p>
-<?php endif; ?>
 
+    <?php if(isset($photoPath)): ?>
+        <p><img src="<?= $rootUri . "/" . urldecode($photoPath) ?>" width="150px" height="150px"></p>
+    <?php endif; ?>
+
+    <h3>Prix : <?= $prix ?></h3>
+
+    <?php $sum = 0; ?>
+
+    <?php foreach($participants as $participant): ?>
+        <p><?= $participant->emailParticipant ?> : <?= $participant->somme ?> $</p>
+        <?php $sum += $participant->somme; ?>
+    <?php endforeach; ?>
+
+    <h1>Reste à payer : <?= $prix-$sum; ?></h1>
+
+    <a data-toggle="modal" href="#participate" class="btn btn-primary">Participer</a>
+
+    <div class="modal fade" id="participate" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Participer à la cagnotte</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="<?= $router->pathFor('participerCagnotte', ['id'=> $id, 'idItem' => $idItem]) ?>">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="inputPrice">Somme à verser</label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="inputPrice" name="somme" value="" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Participer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 </body>
