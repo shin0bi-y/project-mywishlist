@@ -56,6 +56,9 @@ class User
                 $this->c->flash->addMessage('mailexistant', 'Inscription impossible, l\'email utilisé est déjà utilisé');
                 $rs = $rs->withRedirect($this->c->router->pathFor("home"));
             }
+        } else {
+            $this->c->flash->addMessage('mailnonconforme', 'Inscription impossible (mail non conforme)');
+            $rs = $rs->withRedirect($this->c->router->pathFor("home"));
         }
 
         return $rs;
