@@ -12,6 +12,7 @@
             <p> Liste privée</p>
             <?php endif; ?>
             <a data-toggle="modal" href="#addItem" class="btn btn-primary">Ajouter un item</a>
+            <a data-toggle="modal" href="#addMessage" class="btn btn-primary">Laisser un message</a>
         </div>
         <div class="card-footer text-muted">
             Crée le <?= $liste->creationDate ?> - Expire le <?= $liste->limitDate ?>
@@ -42,6 +43,26 @@
                 </div>
             <?php endforeach;?>
         </div>
+        <div class="card-footer">
+            Messages
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Pseudo</th>
+                <th scope="col">Message</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($messages as $message) :?>
+            <tr>
+                <td><?= $message->nameAuthor ?></td>
+                <td><?= $message->message ?></td>
+            </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+
     </div>
 <?php else: ?>
     Liste expirée
@@ -72,6 +93,36 @@
                     <div class="form-group">
                         <label for="inputPrice">Prix*</label>
                         <input type="number" step="0.01" min="0" class="form-control" id="inputPrice" name="prix" value="" required>
+                    </div>
+                    Les champs marqués d'un astérisque sont obligatoires.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addMessage" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajout d'un message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="<?= $router->pathFor('addMessage', ['id' => $liste->idList]) ?>">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputName">Nom*</label>
+                        <input type="text" name="author" class="form-control" id="author" placeholder="Votre nom" value="Anonyme" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputDesc">Message*</label>
+                        <textarea class="form-control" id="message" rows="3" name="message" style="resize :none"></textarea>
                     </div>
                     Les champs marqués d'un astérisque sont obligatoires.
                 </div>

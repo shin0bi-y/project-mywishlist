@@ -45,7 +45,7 @@ $app->get('/listes[/]', \mywishlist\controller\Liste::class . ':showAllList')->s
 
 //--> Message
 
-$app->post('/liste/message[/]',\mywishlist\controller\Liste::class . ':ajouterMessage')->setName('addMessage');
+$app->post('/liste/{id}/message[/]',\mywishlist\controller\Liste::class . ':ajouterMessage')->setName('addMessage');
 
 //--> Item
 

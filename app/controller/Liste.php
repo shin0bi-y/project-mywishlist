@@ -101,9 +101,11 @@ class Liste
 
         if ($liste != null) {
             $items = $liste->items()->get();
+            $messages = $liste->messages()->get();
             $this->c->view->render($rs, 'liste.phtml', [
                 "liste" => $liste,
-                "items" => $items
+                "items" => $items,
+                "messages" => $messages
             ]);
         }
         return $rs;
@@ -140,18 +142,21 @@ class Liste
      */
     public function ajouterMessage(Request $rq, Response $rs, array $args): Response
     {
-        $idList = $rq->getParsedBody()['idList'];
+        $idList = $args['id'];
         $message = $rq->getParsedBody()['message'];
         $email = $_SESSION['user']['email'];
+        $name = $rq->getParsedBody()['author'];
         $date = date('Y-m-d H:i:s');
 
         $msg = new \mywishlist\model\Message();
         $msg->idList = filter_var($idList, FILTER_SANITIZE_NUMBER_INT);
-        $msg->emailAuthor = filter_var($email, FILTER_SANITIZE_NUMBER_INT);
+        $msg->emailUser = filter_var($email, FILTER_SANITIZE_EMAIL);
+        $msg->nameAuthor = filter_var($name, FILTER_SANITIZE_STRING);
         $msg->message = filter_var($message, FILTER_SANITIZE_STRING);
         $msg->date = $date;
 
         $msg->save();
+        $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $idList]));
         return $rs;
     }
 }

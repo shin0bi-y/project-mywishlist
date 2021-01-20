@@ -60,6 +60,7 @@ create table message (
     idMessage int PRIMARY KEY AUTO_INCREMENT,
     idList VARCHAR(255),
     emailUser VARCHAR(255),
+    nameAuthor varchar(255) DEFAULT NULL,
     message varchar(1023),
     date DATE,
     FOREIGN KEY fk_emailUserMessage (emailUser) references users(email),
