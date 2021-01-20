@@ -29,7 +29,6 @@ class Cagnotte
         $cagnotte->idItem = $args['idItem'];
         $cagnotte->prix = $args['prix'];
         $cagnotte->emailCreator = $args['emailCreator'];
-        $cagnotte->date = time();
         $cagnotte->save();
 
         $rs = $rs->withRedirect($this->c->router->pathFor("showAllList"));
@@ -39,16 +38,19 @@ class Cagnotte
     public function showCagnotte(Request $rq, Response $rs, array $args): Response
     {
         $cagnotte = \mywishlist\model\Cagnotte::query()->select("idItem")->where("idItem", "=", $args["idItem"])->pluck("idItem")[0];
-        $item = \mywishlist\model\Item::query()->where('idItem', '=', $args["idItem"])->get();
+        $prix = \mywishlist\model\Item::query()->select("cout")->where('idItem', '=', $args["idItem"])->pluck("cout")[0];
 
         if ($cagnotte === null){
             $this->c->view->render($rs, 'cagnotte.phtml', [
-                "item" => $item,
+                "idItem" => $args["idItem"],
+                "id" => $args["id"],
+                "prix" => $prix,
                 "isCagnotte" => false
             ]);
         } else {
             $this->c->view->render($rs, 'cagnotte.phtml', [
-                "item" => $item,
+                "idItem" => $args["idItem"],
+                "id" => $args["id"],
                 "isCagnotte" => true
             ]);
         }

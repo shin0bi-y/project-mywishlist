@@ -233,8 +233,14 @@ class Item
         $liste = \mywishlist\model\Liste::where('idList', '=', $id)->first();
         $emailUser = $_SESSION['user']['email'];
 
-        if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1)
+
+
+        if ($liste->emailAuthor === $emailUser || $liste->isPublic == 1){
+            $cagnotte = \mywishlist\model\Cagnotte::where('idItem', '=', $idItem)->first();
+            $cagnotte->delete();
             $item->delete();
+        }
+
 
         $rs = $rs->withRedirect($this->c->router->pathFor('showListe', ['id' => $id]));
         return $rs;

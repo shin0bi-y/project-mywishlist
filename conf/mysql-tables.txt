@@ -73,7 +73,6 @@ create table cagnotte (
     idItem int PRIMARY KEY,
     prix double,
     emailCreator VARCHAR(255),
-    date DATE,
     FOREIGN KEY fk_emailCreator (emailCreator) references users(email),
     FOREIGN KEY fk_idItemCagnotte (idItem) references item(idItem)
 );
